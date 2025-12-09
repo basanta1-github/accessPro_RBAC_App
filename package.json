@@ -7,6 +7,8 @@
     "test": "tests"
   },
   "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon --no-deprecation app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -14,14 +16,21 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "async_hooks": "^1.0.0",
+    "axios": "^1.13.2",
     "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
+    "json2csv": "^6.0.0-alpha.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.1",
-    "morgan": "^1.10.1"
+    "morgan": "^1.10.1",
+    "nodemailer": "^7.0.10",
+    "punycode": "^2.3.1",
+    "stripe": "^19.3.1"
   },
   "devDependencies": {
     "jest": "^30.2.0",
