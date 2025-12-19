@@ -25,7 +25,7 @@ const tenantSchema = new mongoose.Schema(
       },
       status: {
         type: String,
-        enum: ["active", "canceled", "trialing", "past_due"],
+        enum: ["active", "canceled", "trialing", "past_due", "incomplete"],
         default: "active",
       },
       stripeCustomerId: {
@@ -35,6 +35,9 @@ const tenantSchema = new mongoose.Schema(
         type: String,
       },
       stripePaymentIntentId: {
+        type: String,
+      },
+      checkoutSessionId: {
         type: String,
       },
       currentPeriodEnd: {

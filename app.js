@@ -13,12 +13,17 @@ const projectRoutes = require("./routes/projectRoutes.js");
 const inviteRoutes = require("./routes/inviteRoutes.js");
 const tenantRoutes = require("./routes/tenantRoutes.js");
 const auditRoutes = require("./routes/auditRoutes.js");
-const billingRoutes = require("./controllers/billingRoutes.js");
+const billingRoutes = require("./routes/billingRoutes.js");
+const webhookHandlerRoute = require("./script/webhookHandlerRoute.js");
 
 const connectDB = require("./config/database");
 const errorHandler = require("./middlewares/errorHandler");
 
-app.use("/api/billing/webhook", express.raw({ type: "application/json" })); // to handle stripe webhook raw body
+app.use(
+  "/billing/webhook",
+  express.raw({ type: "application/json" }),
+  webhookHandlerRoute
+); // to handle stripe webhook raw body
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
