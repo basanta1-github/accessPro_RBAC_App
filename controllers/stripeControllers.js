@@ -6,6 +6,7 @@ const {
   sendInvoice,
 } = require("../middlewares/stripeHandlers.js");
 
+const asyncHandler = require("../middlewares/asyncHandler.js");
 // subscription plans
 const PLANS = {
   Free: { price: null },
@@ -377,11 +378,11 @@ const stripeSuccess = async (req, res) => {
 
 const stripeCancelSubscription = async (req, res) => {
   try {
-    const tenant =
-      (await Tenant.findById(req.tenant.tenantId)) ||
-      (await Tenant.findOne({
-        "subscription.checkoutSessionId": subscription.id,
-      }));
+    const tenant = req.tenant;
+    // (await Tenant.findById(req.tenant.tenantId)) ||
+    // (await Tenant.findOne({
+    //   "subscription.checkoutSessionId": subscription.id,
+    // }));
 
     if (!tenant || !tenant.subscription) {
       return res
@@ -573,8 +574,8 @@ const stripeCheckSubscription = async (req, res) => {
 };
 
 module.exports = {
-  stripeSubscription,
-  stripeSuccess,
-  stripeCancelSubscription,
-  stripeCheckSubscription,
+  stripeSubscription: asyncHandler(stripeSubscription),
+  stripeSuccess: asyncHandler(stripeSuccess),
+  stripeCancelSubscription: asyncHandler(stripeCancelSubscription),
+  stripeCheckSubscription: asyncHandler(stripeCheckSubscription),
 };

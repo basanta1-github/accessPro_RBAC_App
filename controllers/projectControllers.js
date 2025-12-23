@@ -8,6 +8,7 @@ const createProject = asyncHandler(async (req, res) => {
   const currentUser = req.user;
 
   const { name, description, assignedTo } = req.body;
+
   if (!["owner", "admin"].includes(currentUser.role)) {
     return res
       .status(403)
@@ -23,7 +24,7 @@ const createProject = asyncHandler(async (req, res) => {
   if (assignedTo && Array.isArray(assignedTo) && assignedTo.length > 0) {
     validEmployeeIds = await User.find({
       _id: { $in: assignedTo },
-      tenantId: currentUser.tenantId,
+      tenantId: req.tenantId,
       role: "employee",
     }).select("_id");
     if (validEmployeeIds.length === 0) {
@@ -36,7 +37,7 @@ const createProject = asyncHandler(async (req, res) => {
     name,
     description,
     assignedTo: validEmployeeIds.map((e) => e._id),
-    tenantId: currentUser.tenantId,
+    tenantId: req.tenantId,
     createdBy: currentUser.userId,
   });
   res
@@ -47,16 +48,15 @@ const createProject = asyncHandler(async (req, res) => {
 // view all pprojects owner admin employee
 const getProjects = asyncHandler(async (req, res) => {
   const currentUser = req.user;
-  console.log(req.user.userId);
   let projects;
 
   if (["owner", "admin"].includes(currentUser.role)) {
-    projects = await Project.find({ tenantId: currentUser.tenantId });
+    projects = await Project.find({ tenantId: req.tenantId });
   } else if (currentUser.role === "employee") {
     //employees only sees the assigned projects
 
     projects = await Project.find({
-      tenantId: currentUser.tenantId,
+      tenantId: req.tenantId,
       assignedTo: currentUser.userId,
     });
   } else {
@@ -79,7 +79,10 @@ const getProjects = asyncHandler(async (req, res) => {
 
 const updateProject = asyncHandler(async (req, res) => {
   const currentUser = req.user;
-  const project = await Project.findById(req.params.id);
+  const project = await Project.findOne({
+    _id: req.params.id,
+    tenantId: req.tenantId,
+  });
 
   if (!project) return res.status(404).json({ message: "project not found" });
 
@@ -100,9 +103,13 @@ const updateProject = asyncHandler(async (req, res) => {
   if (!["owner", "admin", "employee"].includes(currentUser.role)) {
     return res.status(403).json({ message: "not allowed" });
   }
-  const updated = await Project.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-  });
+  const updated = await Project.findByIdAndUpdate(
+    { _id: req.params.id, tenantId: req.tenantId },
+    req.body,
+    {
+      new: true,
+    }
+  );
   res.json({ message: "Project updated successfully", project: updated });
 });
 
@@ -111,7 +118,7 @@ const softDeleteProject = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const project = await Project.findOne({
     _id: id,
-    tenantId: req.user.tenantId,
+    tenantId: req.tenantId,
     isDeleted: false,
   }).setOptions({ _skipSoftDelete: ["Project"] }); // skip plugin for this query;
   if (!project)
@@ -130,7 +137,7 @@ const restoreProject = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const project = await Project.findOne({
     _id: id,
-    tenantId: req.user.tenantId,
+    tenantId: req.tenantId,
     isDeleted: true,
   });
   if (!project)
@@ -146,7 +153,10 @@ const restoreProject = asyncHandler(async (req, res) => {
 // delete project
 const deleteProject = asyncHandler(async (req, res) => {
   const currentUser = req.user;
-  const project = await Project.findById(req.params.id);
+  const project = await Project.findOne({
+    _id: req.params.id,
+    tenantId: req.tenantId,
+  });
   if (!project) return res.status(404).json({ message: "Project not found" });
 
   if (!["owner", "admin"].includes(currentUser.role)) {

@@ -15,7 +15,7 @@ const { Parser: Json2csvParser } = require("json2csv");
  */
 
 const getAuditLogs = asyncHandler(async (req, res) => {
-  const tenantId = req.user.tenantId;
+  const tenantId = req.tenantId;
   const page = Math.max(1, parseInt(req.query.page || "1", 10));
   const limit = Math.max(
     1,
@@ -26,9 +26,9 @@ const getAuditLogs = asyncHandler(async (req, res) => {
   // build filter - tenant - scoped
   const filter = { tenantId };
 
-  if (req.query.userId) filter, (userId = req.query.userId);
+  if (req.query.userId) filter.userId = req.query.userId;
   if (req.query.action) filter.action = req.query.action;
-  if (req.query.resource) filter.resourse = req.query.resource;
+  if (req.query.resource) filter.resource = req.query.resource;
 
   // date range
   if (req.query.from || req.query.to) {
@@ -53,12 +53,12 @@ const getAuditLogs = asyncHandler(async (req, res) => {
  */
 
 const exportAuditLogsCSV = asyncHandler(async (req, res) => {
-  const tenantId = req.user.tenantId;
+  const tenantId = req.tenantId;
 
   const filter = { tenantId };
 
   if (req.query.userId) filter.userId = req.query.userId;
-  if (req.query.action) filter.action = req.query.actiom;
+  if (req.query.action) filter.action = req.query.action;
   if (req.query.resource) filter.resource = req.query.resource;
   if (req.query.from || req.query.to) {
     filter.timestamp = {};
@@ -66,7 +66,7 @@ const exportAuditLogsCSV = asyncHandler(async (req, res) => {
     if (req.query.to) filter.timestamp.$lte = new Date(req.query.to);
   }
   // fetch all matching (be cautious in prod; consider streaming / limits)
-  const logs = await AuditLog.find(filter).sort({ timestamp: -1 }).lean;
+  const logs = await AuditLog.find(filter).sort({ timestamp: -1 }).lean();
 
   // Prepare rows for CSV: flatten metadata to JSON-string to avoid nested issues
 

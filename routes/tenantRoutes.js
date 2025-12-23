@@ -3,7 +3,6 @@ const router = express.Router();
 
 const protect = require("../middlewares/authentication.js");
 const authorize = require("../middlewares/authorize.js");
-const tenantIsolation = require("../middlewares/tenantIsolation.js");
 const {
   auditLoggerMiddleware,
 } = require("../middlewares/auditLogMiddleware.js");
@@ -13,13 +12,15 @@ const {
   updateTenant,
   deactiveTenant,
 } = require("../controllers/tenantController.js");
-
+const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
+const attachTenant = require("../utils/attachTenant.js");
 router.get("/", getAllTenants);
 
 router.get(
   "/:id",
   protect,
-  tenantIsolation,
+  tenantSubDomainMiddleware,
+  attachTenant,
   authorize(["tenant:view"]),
   auditLoggerMiddleware("Tenant", "viewed"),
   getTenant
@@ -27,7 +28,8 @@ router.get(
 router.put(
   "/:id/update",
   protect,
-  tenantIsolation,
+  tenantSubDomainMiddleware,
+  attachTenant,
   authorize(["tenant:update"]),
   auditLoggerMiddleware("Tenant", "updated"),
   updateTenant
@@ -35,7 +37,8 @@ router.put(
 router.put(
   "/:id/deactive",
   protect,
-  tenantIsolation,
+  tenantSubDomainMiddleware,
+  attachTenant,
   authorize(["tenant:deactive"]),
   auditLoggerMiddleware("Tenant", "deactivated"),
   deactiveTenant

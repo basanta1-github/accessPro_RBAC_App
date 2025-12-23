@@ -3,7 +3,6 @@ const router = express.Router();
 
 const protect = require("../middlewares/authentication.js");
 const authorize = require("../middlewares/authorize.js");
-const tenantIsolation = require("../middlewares/tenantIsolation.js");
 const {
   auditLoggerMiddleware,
 } = require("../middlewares/auditLogMiddleware.js");
@@ -15,11 +14,14 @@ const {
   updateUser,
   deactiveUser,
 } = require("../controllers/userInviteController.js");
+const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
+const attachTenant = require("../utils/attachTenant.js");
 
 router.post(
   "/invite",
   protect,
-  tenantIsolation,
+  tenantSubDomainMiddleware,
+  attachTenant,
   restrictByUserLimit,
   authorize(["user:create"]),
   auditLoggerMiddleware("User", "invited"),
@@ -31,7 +33,8 @@ router.post("/accept-invite", acceptInvite);
 router.get(
   "/getUsers",
   protect,
-  tenantIsolation,
+  tenantSubDomainMiddleware,
+  attachTenant,
   authorize(["user:view"]),
   auditLoggerMiddleware("User", "viewed"),
   getUsers
@@ -40,7 +43,8 @@ router.get(
 router.put(
   "/:id",
   protect,
-  tenantIsolation,
+  tenantSubDomainMiddleware,
+  attachTenant,
   authorize(["user:update"]),
   auditLoggerMiddleware("User", "updated"),
   updateUser
@@ -49,7 +53,8 @@ router.put(
 router.put(
   "/:id/deactive",
   protect,
-  tenantIsolation,
+  tenantSubDomainMiddleware,
+  attachTenant,
   authorize(["user:deactivated"]),
   auditLoggerMiddleware("User", "deactivated"),
   deactiveUser

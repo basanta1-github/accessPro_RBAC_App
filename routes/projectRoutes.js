@@ -3,11 +3,11 @@ const router = express.Router();
 
 const protect = require("../middlewares/authentication.js");
 const authorize = require("../middlewares/authorize.js");
-const tenantIsolation = require("../middlewares/tenantIsolation.js");
 const {
   auditLoggerMiddleware,
 } = require("../middlewares/auditLogMiddleware.js");
-
+const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
+const attachTenant = require("../utils/attachTenant.js");
 const {
   createProject,
   getProjects,
@@ -21,7 +21,8 @@ const {
 router.post(
   "/create",
   protect,
-  tenantIsolation,
+  tenantSubDomainMiddleware,
+  attachTenant,
   authorize(["project:create"]),
   auditLoggerMiddleware("Project", "created"),
   createProject
@@ -30,20 +31,18 @@ router.post(
 router.get(
   "/getProjects",
   protect,
-  tenantIsolation,
+  tenantSubDomainMiddleware,
+  attachTenant,
   authorize(["project:view"]),
-
   auditLoggerMiddleware("Project", "viewed"),
-  getProjects,
-  (req, res) => {
-    console.log("hello project is viewed");
-  }
+  getProjects
 );
 //update
 router.put(
   "/update/:id",
   protect,
-  tenantIsolation,
+  tenantSubDomainMiddleware,
+  attachTenant,
   authorize(["project:update"]),
   auditLoggerMiddleware("Project", "updated"),
   updateProject
@@ -52,7 +51,8 @@ router.put(
 router.delete(
   "/delete/:id",
   protect,
-  tenantIsolation,
+  tenantSubDomainMiddleware,
+  attachTenant,
   authorize(["project:delete"]),
   auditLoggerMiddleware("Project", "deleted"),
   deleteProject
@@ -60,7 +60,8 @@ router.delete(
 router.put(
   "/softDelete/:id",
   protect,
-  tenantIsolation,
+  tenantSubDomainMiddleware,
+  attachTenant,
   authorize(["project:deactivated"]),
   auditLoggerMiddleware("Project", "soft-delete"),
   softDeleteProject
@@ -68,7 +69,8 @@ router.put(
 router.put(
   "/restore/:id",
   protect,
-  tenantIsolation,
+  tenantSubDomainMiddleware,
+  attachTenant,
   authorize(["project:restored"]),
   auditLoggerMiddleware("Project", "restored"),
   restoreProject

@@ -10,21 +10,30 @@ const {
   stripeCancelSubscription,
   stripeCheckSubscription,
 } = require("../controllers/stripeControllers.js");
+const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
+const attachTenant = require("../utils/attachTenant.js");
+
 router.post(
   "/subscribe",
   protect,
-  tenantIsolation,
-  tenantMiddleware,
+  tenantSubDomainMiddleware,
+  attachTenant,
   stripeSubscription
 );
 router.get("/stripe-success", stripeSuccess);
-router.post("/cancel-subscription", protect, stripeCancelSubscription);
+router.post(
+  "/cancel-subscription",
+  protect,
+  tenantSubDomainMiddleware,
+  attachTenant,
+  stripeCancelSubscription
+);
 
 router.get(
   "/check-subscription",
   protect,
-  tenantIsolation,
-  tenantMiddleware,
+  tenantSubDomainMiddleware,
+  attachTenant,
   stripeCheckSubscription
 );
 

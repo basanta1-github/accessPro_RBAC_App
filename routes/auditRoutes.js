@@ -3,7 +3,6 @@ const router = express.Router();
 
 const protect = require("../middlewares/authentication.js");
 const authorize = require("../middlewares/authorize.js");
-const tenantIsolation = require("../middlewares/tenantIsolation.js");
 const {
   getAuditLogs,
   exportAuditLogsCSV,
@@ -13,11 +12,14 @@ const {
 } = require("../middlewares/auditLogMiddleware.js");
 
 const restrictByPlan = require("../middlewares/planRestriction");
+const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
+const attachTenant = require("../utils/attachTenant.js");
 
 router.get(
   "/",
   protect,
-  tenantIsolation,
+  tenantSubDomainMiddleware,
+  attachTenant,
   authorize(["audit:view"]),
   auditLoggerMiddleware("User", "audit-logged"),
   getAuditLogs
@@ -25,7 +27,8 @@ router.get(
 router.get(
   "/export",
   protect,
-  tenantIsolation,
+  tenantSubDomainMiddleware,
+  attachTenant,
   authorize(["audit:view"]),
   restrictByPlan(["Pro", "Enterprise"]),
   auditLoggerMiddleware("User", "csv-exported"),

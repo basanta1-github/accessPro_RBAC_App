@@ -3,7 +3,6 @@ const router = express.Router();
 
 const protect = require("../middlewares/authentication.js");
 const authorize = require("../middlewares/authorize.js");
-const tenantIsolation = require("../middlewares/tenantIsolation.js");
 const {
   auditLoggerMiddleware,
 } = require("../middlewares/auditLogMiddleware.js");
@@ -15,18 +14,22 @@ const {
   softDeleteUser,
   restoreUser,
 } = require("../controllers/userActionControllers.js");
+const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
+const attachTenant = require("../utils/attachTenant.js");
 
 router.get(
   "/getUsers",
   protect,
-  tenantIsolation,
+  tenantSubDomainMiddleware,
+  attachTenant,
   auditLoggerMiddleware("User", "viewed"),
   getUsers
 );
 router.post(
   "/create",
   protect,
-  tenantIsolation,
+  tenantSubDomainMiddleware,
+  attachTenant,
   restrictByUserLimit,
   authorize(["user:create:employee", "user:create:admin"]),
   auditLoggerMiddleware("User", "created"),
@@ -36,31 +39,29 @@ router.post(
 router.delete(
   "/delete/:id",
   protect,
-  tenantIsolation,
+  tenantSubDomainMiddleware,
+  attachTenant,
   authorize(["user:delete:employee", "user:delete:admin"]),
   auditLoggerMiddleware("User", "deleted"),
-  deleteUser,
-  (req, res) => {
-    res.json({ message: `User ${req.params.id} deleted!` });
-  }
+  deleteUser
 );
 
 router.put(
-  "/delete/:id",
+  "/soft-delete/:id",
   protect,
-  tenantIsolation,
+  tenantSubDomainMiddleware,
+  attachTenant,
   authorize(["user:deactivated"]),
   auditLoggerMiddleware("User", "soft-delete"),
-
   softDeleteUser
 );
 router.put(
   "/restore/:id",
   protect,
-  tenantIsolation,
+  tenantSubDomainMiddleware,
+  attachTenant,
   authorize(["user:restored"]),
   auditLoggerMiddleware("User", "restore"),
-
   restoreUser
 );
 

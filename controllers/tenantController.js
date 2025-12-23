@@ -13,7 +13,7 @@ const getTenant = asyncHandler(async (req, res) => {
   const tenant = await Tenant.findById(req.params.id);
   if (!tenant) return res.status(404).json({ message: "Tenant not found" });
 
-  if (tenant._id.toString() !== req.user.tenantId.toString()) {
+  if (tenant._id.toString() !== req.tenantId.toString()) {
     return res.status(403).json({ message: "Access denied" });
   }
   res.status(200).json({ tenant });
@@ -25,7 +25,7 @@ const updateTenant = asyncHandler(async (req, res) => {
   const tenant = await Tenant.findById(req.params.id);
   if (!tenant) return res.status(404).json({ message: "tenant not found" });
 
-  if (tenant._id.toString() !== req.user.tenantId.toString()) {
+  if (tenant._id.toString() !== req.tenantId.toString()) {
     return res.status(403).json({ message: "Access denied" });
   }
 
@@ -73,7 +73,7 @@ const updateTenant = asyncHandler(async (req, res) => {
 //deactive tenant
 
 const deactiveTenant = asyncHandler(async (req, res) => {
-  const tenant = await Tenant.findById(req.user.tenantId);
+  const tenant = await Tenant.findById(req.params.id);
   if (!tenant) return res.status(404).json({ message: "tenant not found" });
 
   tenant.status = "inactive";

@@ -4,10 +4,7 @@ const asyncHandler = require("../middlewares/asyncHandler");
 //creating the user for owner and admin
 
 const getUsers = asyncHandler(async (req, res) => {
-  const currentUser = req.user;
-  const users = await User.find({ tenantId: currentUser.tenantId }).select(
-    "-password"
-  );
+  const users = await User.find({ tenantId: req.tenantId }).select("-password");
   if (!users || users.length === 0) {
     return res.status(404).json({ message: "no users found for this company" });
   }
@@ -19,7 +16,7 @@ const getUsers = asyncHandler(async (req, res) => {
 });
 const createUser = asyncHandler(async (req, res) => {
   if (!req.body) {
-    res.status(400).json({
+    return res.status(400).json({
       message:
         "please ensure you keep the required fields: name, email, password, role",
     });
@@ -63,10 +60,9 @@ const createUser = asyncHandler(async (req, res) => {
     email,
     password,
     role,
-    tenantId: currentUser.tenantId,
-    companyName: currentUser.companyName,
+    tenantId: req.tenantId,
+    companyName: req.tenant.companyName,
   });
-  console.log(currentUser);
   res.status(201).json({
     message: "User created successfully",
     user: newUser,
@@ -77,7 +73,10 @@ const createUser = asyncHandler(async (req, res) => {
 
 const deleteUser = asyncHandler(async (req, res) => {
   const currentUser = req.user;
-  const targetUser = await User.findById(req.params.id);
+  const targetUser = await User.findOne({
+    _id: req.params.id,
+    tenantId: req.tenantId,
+  });
 
   if (!targetUser) {
     return res.status(404).json({ message: "User not found" });
@@ -112,9 +111,8 @@ const softDeleteUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const user = await User.findOne({
     _id: id,
-    tenantId: req.user.tenantId,
+    tenantId: req.tenantId,
   }).setOptions({ _skipSoftDelete: ["User"] });
-  console.log(req.user.tenantId);
 
   if (!user)
     return res
@@ -132,7 +130,7 @@ const restoreUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const user = await User.findOne({
     _id: id,
-    tenantId: req.user.tenantId,
+    tenantId: req.tenantId,
     isDeleted: true,
   });
   if (!user)

@@ -25,6 +25,8 @@ app.use(
   webhookHandlerRoute
 ); // to handle stripe webhook raw body
 
+// required for subdomain detection
+app.set("trust proxy", true);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(errorHandler);

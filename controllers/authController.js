@@ -36,7 +36,7 @@ const register = async (req, res) => {
     }
 
     // creating tenant
-    const tenant = await Tenant.create({ name: companyName, domain });
+    const tenant = await Tenant.create({ name: companyName, domain, email });
 
     await createdefaultRoles(tenant._id);
 
