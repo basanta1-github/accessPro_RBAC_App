@@ -16,13 +16,14 @@ const {
 } = require("../controllers/userActionControllers.js");
 const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
 const attachTenant = require("../utils/attachTenant.js");
+const activityLogger = require("../middlewares/activityLogger.js");
 
 router.get(
   "/getUsers",
   protect,
   tenantSubDomainMiddleware,
   attachTenant,
-  auditLoggerMiddleware("User", "viewed"),
+  activityLogger("get users"),
   getUsers
 );
 router.post(
@@ -32,6 +33,7 @@ router.post(
   attachTenant,
   restrictByUserLimit,
   authorize(["user:create:employee", "user:create:admin"]),
+  activityLogger("user created"),
   auditLoggerMiddleware("User", "created"),
   createUser
 );
@@ -42,6 +44,7 @@ router.delete(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["user:delete:employee", "user:delete:admin"]),
+  activityLogger("user deleted"),
   auditLoggerMiddleware("User", "deleted"),
   deleteUser
 );
@@ -52,6 +55,7 @@ router.put(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["user:deactivated"]),
+  activityLogger("user deactivated"),
   auditLoggerMiddleware("User", "soft-delete"),
   softDeleteUser
 );
@@ -61,6 +65,7 @@ router.put(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["user:restored"]),
+  activityLogger("user restored"),
   auditLoggerMiddleware("User", "restore"),
   restoreUser
 );

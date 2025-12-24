@@ -14,6 +14,7 @@ const {
 const restrictByPlan = require("../middlewares/planRestriction");
 const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
 const attachTenant = require("../utils/attachTenant.js");
+const activityLogger = require("../middlewares/activityLogger.js");
 
 router.get(
   "/",
@@ -21,7 +22,7 @@ router.get(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["audit:view"]),
-  auditLoggerMiddleware("User", "audit-logged"),
+  activityLogger("view audit logs"),
   getAuditLogs
 );
 router.get(
@@ -31,6 +32,7 @@ router.get(
   attachTenant,
   authorize(["audit:view"]),
   restrictByPlan(["Pro", "Enterprise"]),
+  activityLogger("export audit csv"),
   auditLoggerMiddleware("User", "csv-exported"),
   exportAuditLogsCSV
 );

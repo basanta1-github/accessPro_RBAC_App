@@ -18,6 +18,7 @@ const webhookHandlerRoute = require("./script/webhookHandlerRoute.js");
 
 const connectDB = require("./config/database");
 const errorHandler = require("./middlewares/errorHandler");
+// const activityLogger = require("./middlewares/activityLogger.js");
 
 app.use(
   "/billing/webhook",
@@ -25,15 +26,19 @@ app.use(
   webhookHandlerRoute
 ); // to handle stripe webhook raw body
 
-// required for subdomain detection
+// app and security middlewares
 app.set("trust proxy", true);
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(errorHandler);
 app.use(helmet());
 app.use(cors("https://localhost:5000"));
 app.use(morgan("dev"));
 app.use(cookieParser());
+
+// body parsers after webhook
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// global activity logger
+// app.use(activityLogger);
 
 app.use("/api/admin", adminRoutes); // only use it when updating the permissions
 app.use("/", authRoutes);
@@ -44,12 +49,17 @@ app.use("/tenants", tenantRoutes);
 app.use("/audit", auditRoutes);
 app.use("/api/billing", billingRoutes);
 
+// checking
 app.get("/", (req, res) => {
   res.status(200).json({
     message:
       "welcome to the AccessPro app a fully functional rbac backend system",
   });
 });
+
+// error handler always at last
+
+app.use(errorHandler);
 
 const afterDBMiddleware = async (info) => {
   console.log("Database info from  afterDBMiddleware", info);

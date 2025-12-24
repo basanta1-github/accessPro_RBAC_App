@@ -16,6 +16,7 @@ const {
   softDeleteProject,
   restoreProject,
 } = require("../controllers/projectControllers.js");
+const activityLogger = require("../middlewares/activityLogger.js");
 
 // create new project
 router.post(
@@ -24,6 +25,7 @@ router.post(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["project:create"]),
+  activityLogger("create project"),
   auditLoggerMiddleware("Project", "created"),
   createProject
 );
@@ -34,7 +36,7 @@ router.get(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["project:view"]),
-  auditLoggerMiddleware("Project", "viewed"),
+  activityLogger("get project"),
   getProjects
 );
 //update
@@ -44,6 +46,7 @@ router.put(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["project:update"]),
+  activityLogger("update project"),
   auditLoggerMiddleware("Project", "updated"),
   updateProject
 );
@@ -54,6 +57,7 @@ router.delete(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["project:delete"]),
+  activityLogger("delete project"),
   auditLoggerMiddleware("Project", "deleted"),
   deleteProject
 );
@@ -63,6 +67,7 @@ router.put(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["project:deactivated"]),
+  activityLogger("deactive project"),
   auditLoggerMiddleware("Project", "soft-delete"),
   softDeleteProject
 );
@@ -72,6 +77,7 @@ router.put(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["project:restored"]),
+  activityLogger("restore project"),
   auditLoggerMiddleware("Project", "restored"),
   restoreProject
 );

@@ -7,11 +7,13 @@ const createDefaultRoles = require("../utils/createDefaultroles");
 const {
   auditLoggerMiddleware,
 } = require("../middlewares/auditLogMiddleware.js");
+const activityLogger = require("../middlewares/activityLogger.js");
 
 // Only for admins or owner
 router.post(
   "/sync-roles",
   protect,
+  activityLogger("roles synced"),
   auditLoggerMiddleware("User", "roles-updated"),
   async (req, res) => {
     if (req.user.role !== "owner") {

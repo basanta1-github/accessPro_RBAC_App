@@ -16,6 +16,7 @@ const {
 } = require("../controllers/userInviteController.js");
 const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
 const attachTenant = require("../utils/attachTenant.js");
+const activityLogger = require("../middlewares/activityLogger.js");
 
 router.post(
   "/invite",
@@ -24,11 +25,12 @@ router.post(
   attachTenant,
   restrictByUserLimit,
   authorize(["user:create"]),
+  activityLogger("invite user"),
   auditLoggerMiddleware("User", "invited"),
   inviteUser
 );
 
-router.post("/accept-invite", acceptInvite);
+router.post("/accept-invite", activityLogger("accepted invite"), acceptInvite);
 
 router.get(
   "/getUsers",
@@ -36,7 +38,7 @@ router.get(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["user:view"]),
-  auditLoggerMiddleware("User", "viewed"),
+  activityLogger("get users"),
   getUsers
 );
 
@@ -46,6 +48,7 @@ router.put(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["user:update"]),
+  activityLogger("update user"),
   auditLoggerMiddleware("User", "updated"),
   updateUser
 );
@@ -56,6 +59,7 @@ router.put(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["user:deactivated"]),
+  activityLogger("deactive users"),
   auditLoggerMiddleware("User", "deactivated"),
   deactiveUser
 );

@@ -14,7 +14,8 @@ const {
 } = require("../controllers/tenantController.js");
 const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
 const attachTenant = require("../utils/attachTenant.js");
-router.get("/", getAllTenants);
+const activityLogger = require("../middlewares/activityLogger.js");
+router.get("/", activityLogger("view all tenants"), getAllTenants);
 
 router.get(
   "/:id",
@@ -22,7 +23,7 @@ router.get(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["tenant:view"]),
-  auditLoggerMiddleware("Tenant", "viewed"),
+  activityLogger("view tenant"),
   getTenant
 );
 router.put(
@@ -31,6 +32,7 @@ router.put(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["tenant:update"]),
+  activityLogger("update tenant"),
   auditLoggerMiddleware("Tenant", "updated"),
   updateTenant
 );
@@ -40,6 +42,7 @@ router.put(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["tenant:deactive"]),
+  activityLogger("deactive tenant"),
   auditLoggerMiddleware("Tenant", "deactivated"),
   deactiveTenant
 );
