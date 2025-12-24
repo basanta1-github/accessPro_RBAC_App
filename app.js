@@ -18,6 +18,8 @@ const webhookHandlerRoute = require("./script/webhookHandlerRoute.js");
 
 const connectDB = require("./config/database");
 const errorHandler = require("./middlewares/errorHandler");
+// app rate limiter
+const appRateLimiter = require("./middlewares/rateLimiter/appRateLimit.js");
 // const activityLogger = require("./middlewares/activityLogger.js");
 
 app.use(
@@ -37,8 +39,8 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// global activity logger
-// app.use(activityLogger);
+// rate limiter
+app.use(appRateLimiter);
 
 app.use("/api/admin", adminRoutes); // only use it when updating the permissions
 app.use("/", authRoutes);
