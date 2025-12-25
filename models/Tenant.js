@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const softDeletePlugin = require("../plugins/softDelete");
 const { type } = require("os");
-const stripe = require("../utils/stripe");
+const stripe = require("../config/stripe");
 
 const tenantSchema = new mongoose.Schema(
   {

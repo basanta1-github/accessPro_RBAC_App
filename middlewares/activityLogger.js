@@ -40,7 +40,7 @@ const activityLogger = (customAction) => async (req, res, next) => {
       console.error("ActivityLogger failed:", err);
     });
 
-    console.log("activity logger triggered", doc.action);
+    // console.log("activity logger triggered", doc.action);
     next();
   } catch (error) {
     console.error("ActivityLogger error:", error);

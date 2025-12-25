@@ -14,7 +14,7 @@ const protect = async (req, res, next) => {
   }
 
   jwt.verify(token, process.env.JWT_ACCESS_SECRET, (err, decoded) => {
-    if (err) return res.status(403).json({ message: "Invalid token.." });
+    if (err) return res.status(401).json({ message: "Invalid token.." });
     req.user = decoded;
     req.tenant = decoded;
     next();

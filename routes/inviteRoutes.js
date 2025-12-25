@@ -15,7 +15,7 @@ const {
   deactiveUser,
 } = require("../controllers/userInviteController.js");
 const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
-const attachTenant = require("../utils/attachTenant.js");
+const attachTenant = require("../middlewares/attachTenant.js");
 const activityLogger = require("../middlewares/activityLogger.js");
 
 router.post(

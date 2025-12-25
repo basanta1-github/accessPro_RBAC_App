@@ -7,7 +7,7 @@ const {
   auditLoggerMiddleware,
 } = require("../middlewares/auditLogMiddleware.js");
 const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
-const attachTenant = require("../utils/attachTenant.js");
+const attachTenant = require("../middlewares/attachTenant.js");
 const {
   createProject,
   getProjects,

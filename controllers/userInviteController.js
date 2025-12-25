@@ -3,11 +3,11 @@ const Tenant = require("../models/Tenant");
 const newLocal = `../models/Invite`;
 const Invite = require(newLocal);
 const generateInviteToken = require("../utils/generateInviteToken");
-const sendInviteEmail = require("../utils/sendEmail");
 const checkEmailExists = require("../utils/checkEmailExists");
 const jwt = require("jsonwebtoken");
 const asyncHandler = require("../middlewares/asyncHandler");
 const restrictByUserLimit = require("../middlewares/restrictByUserLimit");
+const NotificationService = require("../utils/notificationService");
 
 const inviteUser = asyncHandler(async (req, res) => {
   try {
@@ -40,8 +40,16 @@ const inviteUser = asyncHandler(async (req, res) => {
         token,
         expiresAt,
       });
+      // this line is removed after adding notification service
+      // it is easier to manage email sending via notification service
+      // await sendInviteEmail(email, token, tenant.name); // tenant name optional
 
-      await sendInviteEmail(email, token, tenant.name); // tenant name optional
+      // 2. Add NotificationService here **after user creation & email**
+      await NotificationService.notify("invite", {
+        email,
+        token,
+        tenantName: tenant.name,
+      });
 
       res.status(201).json({ message: "Invite sent", inviteId: invite._id });
     });

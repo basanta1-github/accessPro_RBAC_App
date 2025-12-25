@@ -16,11 +16,17 @@ const auditRoutes = require("./routes/auditRoutes.js");
 const billingRoutes = require("./routes/billingRoutes.js");
 const webhookHandlerRoute = require("./script/webhookHandlerRoute.js");
 
-const connectDB = require("./config/database");
+// at the top with other imports
+const testRoutes = require("./routes/testRoutes");
+
+// Mount test routes only in test environment
+if (process.env.NODE_ENV === "test") {
+  app.use("/api", testRoutes);
+}
+
 const errorHandler = require("./middlewares/errorHandler");
 // app rate limiter
 const appRateLimiter = require("./middlewares/rateLimiter/appRateLimit.js");
-// const activityLogger = require("./middlewares/activityLogger.js");
 
 app.use(
   "/billing/webhook",
@@ -29,7 +35,7 @@ app.use(
 ); // to handle stripe webhook raw body
 
 // app and security middlewares
-app.set("trust proxy", true);
+app.set("trust proxy", false); // adjust based on deployment
 app.use(helmet());
 app.use(cors("https://localhost:5000"));
 app.use(morgan("dev"));
@@ -63,21 +69,4 @@ app.get("/", (req, res) => {
 
 app.use(errorHandler);
 
-const afterDBMiddleware = async (info) => {
-  console.log("Database info from  afterDBMiddleware", info);
-};
-
-const start = async () => {
-  try {
-    await connectDB(process.env.MONGO_URI, afterDBMiddleware);
-    console.log("🟢 MongoDB Connected:");
-    app.listen(process.env.PORT, () => {
-      setTimeout(() => {
-        console.log("🛑 Server listening on port: ", process.env.PORT);
-      }, 500);
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
-start();
+module.exports = app;

@@ -13,7 +13,7 @@ const {
 
 const restrictByPlan = require("../middlewares/planRestriction");
 const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
-const attachTenant = require("../utils/attachTenant.js");
+const attachTenant = require("../middlewares/attachTenant.js");
 const activityLogger = require("../middlewares/activityLogger.js");
 
 router.get(

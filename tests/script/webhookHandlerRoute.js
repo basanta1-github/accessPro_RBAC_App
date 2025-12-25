@@ -1,16 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const stripe = require("../config/stripe.js");
-const Tenant = require("../models/Tenant.js");
-const { sendInvoiceEmail } = require("../utils/stripeEmail.js");
+const stripe = require("../../config/stripe.js");
+const Tenant = require("../../models/Tenant.js");
+const { sendInvoiceEmail } = require("../../utils/stripeEmail.js");
 const {
   sendInvoice,
   sendCancellationEmail,
   doRefundIfNeeded,
-} = require("../middlewares/stripeHandlers.js");
-
-const NotificationService = require("../utils/notificationService.js");
-
+} = require("../../middlewares/stripeHandlers.js");
 // stripe Webhook endpoint (public) - stripe will call this
 // IMPORTANT: mount this route with express.raw in app.js:
 // app.post('/api/billing/webhook', express.raw({type: 'application/json'}), billingRouter);
@@ -83,15 +80,9 @@ router.post("/webhook", async (req, res) => {
           await tenant.save();
 
           try {
-            await NotificationService.notify("subscription_invoice", {
-              tenant,
-              amount,
-            });
+            await sendInvoice(tenant, amount);
           } catch (error) {
-            console.error(
-              "failed to send invoice via notification service:",
-              error
-            );
+            console.error("failed to send invoice:", error);
           }
           console.log(
             `Checkout completed for ${tenant.email}, charged: $${(
@@ -139,10 +130,7 @@ router.post("/webhook", async (req, res) => {
           );
 
           await tenant.save();
-          await NotificationService.notify("subscription_invoice", {
-            tenant,
-            amount: invoice.amount_paid,
-          });
+          await sendInvoice(tenant, invoice.amount_paid);
 
           console.log(
             "Saved PaymentIntent ID on invoice.payment_succeeded webhook",
@@ -204,12 +192,12 @@ router.post("/webhook", async (req, res) => {
         await tenant.save();
 
         // Send ONE cancellation email
-        await NotificationService.notify("subscription_cancelled", {
+        await sendCancellationEmail(
           tenant,
-          plan: planBeforeCancel,
+          planBeforeCancel,
           refundAmount,
-          refundId,
-        });
+          refundId
+        );
 
         break;
       }

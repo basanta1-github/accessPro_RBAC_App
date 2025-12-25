@@ -13,13 +13,15 @@ const {
   deactiveTenant,
 } = require("../controllers/tenantController.js");
 const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
-const attachTenant = require("../utils/attachTenant.js");
+const attachTenant = require("../middlewares/attachTenant.js");
 const activityLogger = require("../middlewares/activityLogger.js");
+const { cacheMiddleware } = require("../middlewares/cache");
 router.get("/", activityLogger("view all tenants"), getAllTenants);
 
 router.get(
   "/:id",
   protect,
+  cacheMiddleware((req) => `tenant:${req.params.id}`, 3600),
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["tenant:view"]),

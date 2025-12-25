@@ -1,4 +1,4 @@
-const stripe = require("../utils/stripe.js");
+const stripe = require("../config/stripe.js");
 const { sendInvoiceEmail } = require("../utils/stripeEmail.js");
 // helper to send invoice email
 const sendInvoice = async (tenant, amount = 0) => {

@@ -1,12 +1,15 @@
-const stripe = require("../utils/stripe.js");
+const stripe = require("../config/stripe.js");
 const Tenant = require("../models/Tenant.js");
 const DOMAIN = process.env.CLIENT_URL || "http://localhost:5000";
-const {
-  sendCancellationEmail,
-  sendInvoice,
-} = require("../middlewares/stripeHandlers.js");
+// const {
+//   sendCancellationEmail,
+//   sendInvoice,
+// } = require("../middlewares/stripeHandlers.js");
 
 const asyncHandler = require("../middlewares/asyncHandler.js");
+
+const NotificationService = require("../utils/notificationService");
+
 // subscription plans
 const PLANS = {
   Free: { price: null },
@@ -161,7 +164,14 @@ const stripeSubscription = async (req, res) => {
         plan,
         status: "active",
       };
-      await Promise.all([req.tenant.save(), sendInvoice(req.tenant, 0)]);
+      await Promise.all([
+        req.tenant.save(),
+        NotificationService.notify("plan_activated", {
+          tenant: req.tenant,
+          amount: 0,
+          plan,
+        }),
+      ]);
       return res.json({
         message: `Plan ${plan} activated and card saved`,
         paymentMethodId,
@@ -316,7 +326,10 @@ const stripeSuccess = async (req, res) => {
       tenant.subscription.status = "active";
       await tenant.save();
 
-      await sendInvoice(tenant, amountPaid);
+      await NotificationService.notify("subscription_invoice", {
+        tenant,
+        amount: amountPaid,
+      });
 
       return res.status(200).json({
         success: true,
@@ -349,7 +362,10 @@ const stripeSuccess = async (req, res) => {
 
         await tenant.save();
       }
-      await sendInvoice(tenant, amountPaid);
+      await NotificationService.notify("subscription_invoice", {
+        tenant,
+        amount: amountPaid,
+      });
 
       return res.status(200).json({
         success: true,
@@ -423,7 +439,12 @@ const stripeCancelSubscription = async (req, res) => {
       };
       await tenant.save();
       // Send cancellation email immediately
-      await sendCancellationEmail(tenant, plan, refund.amount, refund.id);
+      await NotificationService.notify("subscription_cancelled", {
+        tenant,
+        plan,
+        refundAmount: refund.amount,
+        refundId: refund.id,
+      });
 
       return res.json({
         message:
