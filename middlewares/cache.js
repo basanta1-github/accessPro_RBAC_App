@@ -11,6 +11,8 @@ const cacheMiddleware = (keyGenerator, expirationInSeconds = 60) => {
       const cachedData = await redisClient.get(key);
       if (cachedData) {
         console.log(`Cache hit for key: ${key}`);
+        console.log("Cached Data:", cachedData);
+        console.log(JSON.parse(cachedData));
         return res.status(200).json(JSON.parse(cachedData));
       }
 

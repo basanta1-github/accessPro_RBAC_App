@@ -38,6 +38,7 @@ router.get(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["user:view"]),
+  cacheMiddleware((req) => `users:tenantId:${req.tenantId}`, 200),
   activityLogger("get users"),
   getUsers
 );

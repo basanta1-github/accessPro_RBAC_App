@@ -16,12 +16,18 @@ const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
 const attachTenant = require("../middlewares/attachTenant.js");
 const activityLogger = require("../middlewares/activityLogger.js");
 const { cacheMiddleware } = require("../middlewares/cache");
-router.get("/", activityLogger("view all tenants"), getAllTenants);
+
+router.get(
+  "/",
+  activityLogger("view all tenants"),
+  cacheMiddleware(() => "tenants:all", 300),
+  getAllTenants
+);
 
 router.get(
   "/:id",
   protect,
-  cacheMiddleware((req) => `tenant:${req.params.id}`, 3600),
+  cacheMiddleware((req) => `tenant:${req.params.id}`, 600),
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["tenant:view"]),

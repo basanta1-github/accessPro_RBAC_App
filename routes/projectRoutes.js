@@ -36,6 +36,7 @@ router.get(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["project:view"]),
+  cacheMiddleware((req) => `projects:tenantId:${req.tenantId}`, 60),
   activityLogger("get project"),
   getProjects
 );

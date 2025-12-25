@@ -1,6 +1,7 @@
 const Tenant = require("../models/Tenant");
 const TenantAuditLog = require("../models/tenantAuditLog");
 const asyncHandler = require("../middlewares/asyncHandler");
+const { invalidateCache } = require("../middlewares/cache");
 
 // getting the tenant details admin and owner
 
@@ -59,6 +60,10 @@ const updateTenant = asyncHandler(async (req, res) => {
 
   await tenant.save();
 
+  // invalidate cache
+  await invalidateCache(`tenant:${req.params.id}`);
+  await invalidateCache(`tenants:all`);
+
   //create audit log
 
   await TenantAuditLog.create({
@@ -78,6 +83,10 @@ const deactiveTenant = asyncHandler(async (req, res) => {
 
   tenant.status = "inactive";
   await tenant.save();
+
+  // invalidate cache
+  await invalidateCache(`tenant:${req.params.id}`);
+  await invalidateCache("tenants:all");
 
   await TenantAuditLog.create({
     tenantId: tenant._id,

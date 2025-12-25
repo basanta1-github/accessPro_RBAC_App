@@ -40,6 +40,8 @@ const createProject = asyncHandler(async (req, res) => {
     tenantId: req.tenantId,
     createdBy: currentUser.userId,
   });
+
+  await invalidateCache(`projects:tenantId:${req.tenantId}`);
   res
     .status(201)
     .json({ message: "project reated successfully", project: newProject });
@@ -110,6 +112,7 @@ const updateProject = asyncHandler(async (req, res) => {
       new: true,
     }
   );
+  await invalidateCache(`projects:tenantId:${req.tenantId}`);
   res.json({ message: "Project updated successfully", project: updated });
 });
 
@@ -128,6 +131,8 @@ const softDeleteProject = asyncHandler(async (req, res) => {
 
   project.isDeleted = true;
   await project.save();
+  // Invalidate cache for this tenant
+  await invalidateCache(`projects:tenantId:${req.tenantId}`);
 
   res.json({ message: `Project ${project.name} soft deleted` });
 });
@@ -147,6 +152,7 @@ const restoreProject = asyncHandler(async (req, res) => {
 
   project.isDeleted = false;
   await project.save();
+  await invalidateCache(`projects:tenantId:${req.tenantId}`);
   res.json({ message: `Project ${project.name} restored` });
 });
 
@@ -166,6 +172,7 @@ const deleteProject = asyncHandler(async (req, res) => {
   }
 
   await project.deleteOne();
+  await invalidateCache(`projects:tenantId:${req.tenantId}`);
   res.json({ message: "project deleted successfully" });
 });
 

@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const asyncHandler = require("../middlewares/asyncHandler");
+const { cacheMiddleware, invalidateCache } = require("../middlewares/cache");
 
 //creating the user for owner and admin
 
@@ -63,6 +64,8 @@ const createUser = asyncHandler(async (req, res) => {
     tenantId: req.tenantId,
     companyName: req.tenant.companyName,
   });
+
+  await invalidateCache(`users:tenantId:${req.tenantId}`);
   res.status(201).json({
     message: "User created successfully",
     user: newUser,
@@ -100,6 +103,8 @@ const deleteUser = asyncHandler(async (req, res) => {
   const targetUserRole = targetUser.role;
   const targetUserName = targetUser.name;
   await targetUser.deleteOne();
+
+  await invalidateCache(`users:tenantId:${req.tenantId}`);
   res.json({
     message: `${targetUserRole}, ${targetUserName} deleted successfully`,
   });
@@ -122,6 +127,8 @@ const softDeleteUser = asyncHandler(async (req, res) => {
   user.isDeleted = true;
   await user.save();
 
+  await invalidateCache(`users:tenantId:${req.tenantId}`);
+
   res.json({ message: `User ${user.name} soft deleted` });
 });
 
@@ -138,6 +145,8 @@ const restoreUser = asyncHandler(async (req, res) => {
 
   user.isDeleted = false;
   await user.save();
+
+  await invalidateCache(`users:tenantId:${req.tenantId}`);
 
   res.json({ message: `User ${user.name} restored` });
 });

@@ -57,6 +57,17 @@ router.post("/webhook", async (req, res) => {
             console.log("tenant not found for the session:", session.id);
             break;
           }
+          // Idempotency check
+          if (
+            tenant.subscription.lastPaymentIntentIdSent ===
+            session.payment_intent
+          ) {
+            console.log(
+              "Payment intent already processed:",
+              session.payment_intent
+            );
+            break;
+          }
           console.log(session.metadata?.plan);
           tenant.subscription = tenant.subscription || {};
           // Set plan dynamically based on session metadata (safer)
@@ -80,6 +91,7 @@ router.post("/webhook", async (req, res) => {
           }
 
           tenant.subscription.stripePaymentIntentId = session.payment_intent;
+          tenant.subscription.lastPaymentIntentIdSent = session.payment_intent;
           await tenant.save();
 
           try {
@@ -129,6 +141,12 @@ router.post("/webhook", async (req, res) => {
             console.log("Tenant found:", tenant.email);
           }
 
+          // --- FINAL STATE IDEMPOTENCY ---
+          if (tenant.subscription.lastInvoiceIdSent === invoice.id) {
+            console.log("Invoice already processed, skipping:", invoice.id);
+            return;
+          }
+
           // Update subscription details
           tenant.subscription.status = "active";
           tenant.subscription.plan = subscription.metadata.plan || "Pro";
@@ -137,6 +155,7 @@ router.post("/webhook", async (req, res) => {
           tenant.subscription.currentPeriodEnd = new Date(
             invoice.lines.data[0].period.end * 1000
           );
+          tenant.subscription.lastInvoiceIdSent = invoice.id; // idempotency marker
 
           await tenant.save();
           await NotificationService.notify("subscription_invoice", {

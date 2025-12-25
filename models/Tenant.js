@@ -50,6 +50,8 @@ const tenantSchema = new mongoose.Schema(
         type: Number,
         default: 0,
       },
+      lastInvoiceIdSent: { type: String }, // track last invoice processed
+      lastPaymentIntentIdSent: { type: String }, // track last payment intent processed
     },
 
     createdAt: {
