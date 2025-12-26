@@ -17,6 +17,7 @@ const {
 const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
 const attachTenant = require("../middlewares/attachTenant.js");
 const activityLogger = require("../middlewares/activityLogger.js");
+const { cacheMiddleware } = require("../middlewares/cache.js");
 
 router.post(
   "/invite",

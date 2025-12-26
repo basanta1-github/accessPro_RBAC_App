@@ -10,7 +10,6 @@ const {
 } = require("../utils/generateTokens");
 const createdefaultRoles = require("../utils/createDefaultroles");
 const jwt = require("jsonwebtoken");
-const { decode } = require("punycode");
 const BlackListedTokens = require("../models/blackListedToken");
 
 const register = async (req, res) => {

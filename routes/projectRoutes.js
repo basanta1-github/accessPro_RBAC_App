@@ -17,6 +17,7 @@ const {
   restoreProject,
 } = require("../controllers/projectControllers.js");
 const activityLogger = require("../middlewares/activityLogger.js");
+const { cacheMiddleware } = require("../middlewares/cache.js");
 
 // create new project
 router.post(
