@@ -13,7 +13,7 @@ const activityLogger = require("../middlewares/activityLogger.js");
 router.post(
   "/sync-roles",
   protect,
-  activityLogger("roles synced"),
+  // activityLogger("roles synced"),
   auditLoggerMiddleware("User", "roles-updated"),
   async (req, res) => {
     if (req.user.role !== "owner") {

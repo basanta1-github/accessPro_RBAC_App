@@ -1,8 +1,8 @@
 const Tenant = require("../models/Tenant");
 const User = require("../models/User");
 const Roles = require("../models/Roles");
-const { logAudit } = require("../middlewares/auditLogMiddleware");
 const bcrypt = require("bcrypt");
+const passwordPolicy = require("../utils/passwordPolicy");
 
 const {
   generateAccessToken,
@@ -27,11 +27,39 @@ const register = async (req, res) => {
     const missingfields = requiredField.filter((field) => !req.body[field]);
 
     if (missingfields.length > 0) {
+      // fake user for logging
+      req.user = {
+        _id: null,
+        tenantId: null,
+        email: email || null,
+        role: null,
+      };
+      req.tenant = null;
       return res.status(400).json({
         message: `${missingfields.join(", ")} ${
           missingfields.length > 1 ? "are" : "is"
         } required`,
       });
+    }
+
+    // Check if tenant with same name, domain, or email already exists
+    const existingTenant = await Tenant.findOne({
+      $or: [{ name: companyName }, { domain }, { email }],
+    });
+
+    if (existingTenant) {
+      req.user = { _id: null, tenantId: existingTenant._id, email, role: null };
+      req.tenant = existingTenant;
+      return res.status(400).json({
+        message:
+          "Tenant with this company name, domain, or email already exists",
+      });
+    }
+
+    // password policy check
+    const passwordError = passwordPolicy(password);
+    if (passwordError) {
+      return res.status(400).json({ message: passwordError });
     }
 
     // creating tenant
@@ -50,15 +78,17 @@ const register = async (req, res) => {
     });
     await user.save();
     // fetch role dynamically
-    const role = await Roles.findOne({ name: user.role, tenantId: tenant._id });
+    const role = await Roles.findOne({
+      name: user.role,
+      tenantId: tenant._id,
+    });
     const permissions = role ? role.permissions : [];
 
-    const accessToken = generateAccessToken(user, permissions);
-    const refreshToken = generateRefreshToken(user);
+    req.user = user;
+    req.tenant = tenant;
+
     res.status(201).json({
-      message: "company and owner registered",
-      accessToken,
-      refreshToken,
+      message: "company registered and owner user created successfully",
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -80,8 +110,32 @@ const login = async (req, res) => {
         .status(400)
         .json({ message: "Invalid Credentials or company name" });
 
+    // check if account is temporary locked due to multiple failed login attempts
+    if (user.lockUntil && user.lockUntil > Date.now()) {
+      const remaining = Math.ceil((user.lockUntil - Date.now()) / 1000 / 60);
+      return res.status(403).json({
+        message: `Account is temporarily locked due to multiple failed login attempts. Try again in ${remaining} minutes.`,
+      });
+    }
     const isMatch = await user.matchPassword(password);
-    if (!isMatch) {
+    if (!isMatch || !user) {
+      // Fake "user" for logging purposes
+      req.user = {
+        _id: null, // unknown user ID
+        tenantId: null, // unknown tenant
+        role: null,
+        email: req.body.email, // optional, for reference
+      };
+      req.tenant = null;
+
+      user.failedLoginAttempts = (user.failedLoginAttempts || 0) + 1;
+
+      // lock account if failed attempts exceed 5
+      if (user.failedLoginAttempts >= 5) {
+        user.lockUntil = Date.now() + 15 * 60 * 1000; // lock for 15 minutes
+      }
+      await user.save();
+
       const resetLink = `${process.env.BACKEND_DEV_URL}/password-reset`;
 
       return res.status(400).json({
@@ -97,7 +151,29 @@ const login = async (req, res) => {
         },
       });
     }
+    // reset failed login attempts on successful login
+    user.failedLoginAttempts = 0;
+    user.lockUntil = null;
+    user.lastLogin = new Date();
+    await user.save();
 
+    /**
+     * OPTIONAL 2FA
+     * Only trigger if user explicitly enabled it
+     */
+
+    if (
+      ["admin", "owner"].includes(user.role) &&
+      user.twoFactor?.enabled === true
+    ) {
+      return res.status(200).json({
+        message: "2FA verification required FOR admin /OWNER",
+        action: "verify-2fa-login",
+        userId: user._id,
+      });
+    }
+
+    // no 2fa -> issue tokens
     user.lastLogin = new Date();
     await user.save();
 
@@ -121,21 +197,9 @@ const login = async (req, res) => {
       message: "Login successful",
       accessToken,
       refreshToken,
-      email,
+      email: user.email,
     });
     try {
-      await logAudit({
-        userId: user._id,
-        tenantId: user.tenantId,
-        req,
-        action: "logged-in",
-        resource: "User",
-        metadata: {
-          email: user.email,
-          ip: req.ip,
-          userAgent: req.headers["user-agent"],
-        },
-      });
     } catch (err) {
       console.log(err, "error fetching the login data");
     }
@@ -185,6 +249,7 @@ const logout = async (req, res) => {
   if (token) {
     // store token in blacklist
     const decoded = jwt.decode(token);
+    console.log(decoded);
     const expiresAt = new Date(decoded.exp * 1000);
     await BlackListedTokens.create({ token, expiresAt });
   }
@@ -197,28 +262,55 @@ const directResetPassword = async (req, res) => {
     const { email, companyName, newPassword } = req.body;
 
     if (!email || !companyName || !newPassword) {
+      req.user = {
+        _id: null,
+        tenantId: null,
+        email: email || null,
+        role: null,
+      };
+      req.tenant = null;
       return res.status(400).json({
         message: "email, companyName, and new password are required",
       });
     }
     const user = await User.findOne({ email, companyName });
     if (!user) {
+      req.user = { _id: null, tenantId: null, email, role: null };
+      req.tenant = null;
       return res
         .status(404)
         .json({ message: "user not found with these details" });
     }
     if (await bcrypt.compare(newPassword, user.password)) {
+      req.user = user;
+      req.tenant = null;
       return res
         .status(404)
         .json({ message: "old password and new password cannot be same" });
     }
+    const passwordError = passwordPolicy(newPassword);
+    if (passwordError) {
+      req.user = user;
+      req.tenant = null;
+      return res.status(400).json({ message: passwordError });
+    }
     user.password = newPassword;
     await user.save();
+
+    req.user = user;
+    req.tenant = { _id: user.tenantId }; // optional for logging
     return res.json({
       message:
         "password reset successful. now you can login with your new password",
     });
   } catch (error) {
+    req.user = {
+      _id: null,
+      tenantId: null,
+      email: req.body.email || null,
+      role: null,
+    };
+    req.tenant = null;
     return res.status(500).json({ message: error.message });
   }
 };

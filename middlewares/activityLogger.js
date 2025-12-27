@@ -1,50 +1,83 @@
+// utils/activityLogger.js
 const ActivityMetric = require("../models/activityMetric");
 
-const activityLogger = (customAction) => async (req, res, next) => {
-  try {
-    if (!req.tenant?._id) {
-      console.log(
-        "activity logger skipped because req.tenant._id is undefined"
-      );
-      return next();
+const activityLogger = {
+  /**
+   * Log an activity in one line from any controller
+   * @param {Object} params
+   * req: Express request object
+   * user: logged-in user object
+   * action: optional custom action string, defaults to `${method} ${path}`
+   * extra: optional extra metadata
+   */
+  track: async ({
+    req,
+    res,
+    user,
+    action,
+    resource,
+    extra = {},
+    allowUserTenantFallback = false,
+  }) => {
+    try {
+      const tenantId = req.tenant?._id;
+      const userId = user?._id;
+
+      // console.log(tenantId, userId);
+      // Conditional skip
+      if (!tenantId || !userId) {
+        if (!allowUserTenantFallback) {
+          return console.log("ActivityLogger skipped: no tenantId or userid");
+        }
+        // else allow logging even if tenantId/userId is null
+      }
+
+      const doc = {
+        tenantId,
+        userId,
+        role: user?.role || null,
+        action: action || `${req.method} ${req.originalUrl}`,
+        method: req.method,
+        path: req.originalUrl,
+        statusCode: res?.statusCode || 200,
+        resource: resource || null,
+        resourceType: req.params?.id ? req.baseUrl : null,
+        resourceId: req.params?.id || null,
+        ip: req.ip,
+        userAgent: req.headers["user-agent"],
+        origin: req.headers.origin,
+        referer: req.headers.referer,
+        subdomain: req.subdomains?.[0],
+        success: res?.statusCode < 400,
+        isAdminAction: req.originalUrl.startsWith("/api/admin"),
+        isBillingAction: req.originalUrl.startsWith("/api/billing"),
+        isAuthAction: req.originalUrl.startsWith("/"),
+        metadata: {
+          ...extra,
+          params: req.params || {},
+          query: req.query || {},
+          body: (() => {
+            if (!req.body) return {};
+            const clone = { ...req.body };
+            if (clone.password) clone.password = "[REDACTED]";
+            if (clone.token) clone.token = "[REDACTED]";
+            return clone;
+          })(),
+        },
+        timestamp: new Date(),
+      };
+
+      // async fire-and-forget
+      await ActivityMetric.create(doc).catch((err) => {
+        console.error("ActivityLogger failed:", err);
+      });
+
+      // optional console log
+      console.log("Activity logged:", doc.action);
+    } catch (err) {
+      console.error("ActivityLogger error:", err);
     }
-
-    const doc = {
-      tenantId: req.tenant._id,
-      userId: req.user?._id,
-      role: req.user?.role,
-
-      action: `${req.method} ${req.baseUrl || req.path}`,
-      method: req.method,
-      path: req.originalUrl,
-      statusCode: res.statusCode,
-
-      resourceType: req.params?.id ? req.baseUrl : null,
-      resourceId: req.params?.id || null,
-
-      ip: req.ip,
-      userAgent: req.headers["user-agent"],
-      origin: req.headers.origin,
-      referer: req.headers.referer,
-      subdomain: req.subdomains?.[0],
-
-      success: res.statusCode < 400,
-
-      isAdminAction: req.originalUrl.startsWith("/api/admin"),
-      isBillingAction: req.originalUrl.startsWith("/api/billing"),
-      isAuthAction: req.originalUrl.startsWith("/"),
-    };
-
-    // async fire and forget do not wait
-    ActivityMetric.create(doc).catch((err) => {
-      console.error("ActivityLogger failed:", err);
-    });
-
-    // console.log("activity logger triggered", doc.action);
-    next();
-  } catch (error) {
-    console.error("ActivityLogger error:", error);
-    next();
-  }
+  },
 };
+
 module.exports = activityLogger;

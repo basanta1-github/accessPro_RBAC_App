@@ -4,9 +4,6 @@ const router = express.Router();
 const protect = require("../middlewares/authentication.js");
 const authorize = require("../middlewares/authorize.js");
 const {
-  auditLoggerMiddleware,
-} = require("../middlewares/auditLogMiddleware.js");
-const {
   getAllTenants,
   getTenant,
   updateTenant,
@@ -14,14 +11,15 @@ const {
 } = require("../controllers/tenantController.js");
 const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
 const attachTenant = require("../middlewares/attachTenant.js");
-const activityLogger = require("../middlewares/activityLogger.js");
+const withActivityLog = require("../utils/controllerLogger.js");
 const { cacheMiddleware } = require("../middlewares/cache");
 
 router.get(
   "/",
-  activityLogger("view all tenants"),
   cacheMiddleware(() => "tenants:all", 300),
-  getAllTenants
+  withActivityLog(getAllTenants, "VIEW_ALL_TENANTS", {
+    allowUserTenantFallback: true,
+  })
 );
 
 router.get(
@@ -30,9 +28,7 @@ router.get(
   cacheMiddleware((req) => `tenant:${req.params.id}`, 600),
   tenantSubDomainMiddleware,
   attachTenant,
-  authorize(["tenant:view"]),
-  activityLogger("view tenant"),
-  getTenant
+  withActivityLog(getTenant, "VIEW_TENANT")
 );
 router.put(
   "/:id/update",
@@ -40,9 +36,7 @@ router.put(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["tenant:update"]),
-  activityLogger("update tenant"),
-  auditLoggerMiddleware("Tenant", "updated"),
-  updateTenant
+  withActivityLog(updateTenant, "UPDATE_TENANT")
 );
 router.put(
   "/:id/deactive",
@@ -50,9 +44,7 @@ router.put(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["tenant:deactive"]),
-  activityLogger("deactive tenant"),
-  auditLoggerMiddleware("Tenant", "deactivated"),
-  deactiveTenant
+  withActivityLog(deactiveTenant, "DEACTIVE_TENANT")
 );
 
 module.exports = router;

@@ -7,7 +7,7 @@ const authorize = (requiredPermissions = []) => {
       if (!req.user || !req.user.tenantId)
         return res.status(401).json({ message: "unauthorized" });
       // fetch users profile
-      const user = await User.findById(req.user.userId);
+      const user = await User.findById(req.user._id);
       if (!user) return res.status(404).json({ message: "user not found" });
 
       const role = await Roles.findOne({

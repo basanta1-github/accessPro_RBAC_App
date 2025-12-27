@@ -33,6 +33,12 @@ const userSchema = new mongoose.Schema(
     lastLogin: {
       type: Date,
     },
+    twoFactor: {
+      enabled: { type: Boolean, default: false },
+      secret: { type: String },
+    },
+    failedLoginAttempts: { type: Number, default: 0 },
+    lockUntil: { type: Date, default: null },
     isDeleted: { type: Boolean, default: false }, // soft delete flag
   },
   { timestamps: true, strict: false }

@@ -69,7 +69,7 @@ const acceptInvite = asyncHandler(async (req, res) => {
       if (!token || !name || !password)
         return res.status(400).json({ message: "All fields required" });
 
-      const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+      const decoded = jwt.verify(token, process.env.INVITE_TOKEN_SECRET);
       const invite = await Invite.findOne({ token, status: "Pending" });
       if (!invite)
         return res.status(400).json({ message: "Invalid or expired invite" });

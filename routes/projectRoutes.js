@@ -16,8 +16,8 @@ const {
   softDeleteProject,
   restoreProject,
 } = require("../controllers/projectControllers.js");
-const activityLogger = require("../middlewares/activityLogger.js");
 const { cacheMiddleware } = require("../middlewares/cache.js");
+const withActivityLog = require("../utils/controllerLogger.js");
 
 // create new project
 router.post(
@@ -26,9 +26,7 @@ router.post(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["project:create"]),
-  activityLogger("create project"),
-  auditLoggerMiddleware("Project", "created"),
-  createProject
+  withActivityLog(createProject, "CREATE_PROJECT")
 );
 // get all projects
 router.get(
@@ -38,8 +36,7 @@ router.get(
   attachTenant,
   authorize(["project:view"]),
   cacheMiddleware((req) => `projects:tenantId:${req.tenantId}`, 60),
-  activityLogger("get project"),
-  getProjects
+  withActivityLog(getProjects, "GET_ALL_PROJECTS")
 );
 //update
 router.put(
@@ -48,9 +45,7 @@ router.put(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["project:update"]),
-  activityLogger("update project"),
-  auditLoggerMiddleware("Project", "updated"),
-  updateProject
+  withActivityLog(updateProject, "UPDATE_PROJECT")
 );
 //delete
 router.delete(
@@ -59,9 +54,7 @@ router.delete(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["project:delete"]),
-  activityLogger("delete project"),
-  auditLoggerMiddleware("Project", "deleted"),
-  deleteProject
+  withActivityLog(deleteProject, "DELETE_PROJECT")
 );
 router.put(
   "/softDelete/:id",
@@ -69,9 +62,7 @@ router.put(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["project:deactivated"]),
-  activityLogger("deactive project"),
-  auditLoggerMiddleware("Project", "soft-delete"),
-  softDeleteProject
+  withActivityLog(softDeleteProject, "DEACTIVE_PROJECT")
 );
 router.put(
   "/restore/:id",
@@ -79,9 +70,7 @@ router.put(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["project:restored"]),
-  activityLogger("restore project"),
-  auditLoggerMiddleware("Project", "restored"),
-  restoreProject
+  withActivityLog(restoreProject, "DEACTIVE_PROJECT")
 );
 
 module.exports = router;

@@ -3,11 +3,8 @@ const router = express.Router();
 const stripe = require("../config/stripe.js");
 const Tenant = require("../models/Tenant.js");
 const { sendInvoiceEmail } = require("../utils/stripeEmail.js");
-const {
-  sendInvoice,
-  sendCancellationEmail,
-  doRefundIfNeeded,
-} = require("../middlewares/stripeHandlers.js");
+const { doRefundIfNeeded } = require("../middlewares/stripeHandlers.js");
+const activityLogger = require("../middlewares/activityLogger.js");
 
 const NotificationService = require("../utils/notificationService.js");
 
@@ -110,6 +107,23 @@ router.post("/webhook", async (req, res) => {
               amount / 100
             ).toFixed(2)}`
           );
+
+          activityLogger
+            .track({
+              req,
+              res,
+              user: { _id: null, role: "system" },
+              action: "STRIPE_CHECKOUT_COMPLETED",
+              resource: "BILLING",
+              extra: {
+                stripeEvent: event.type,
+                plan: tenant.subscription.plan,
+                amount,
+                sessionId: session.id,
+              },
+              allowUserTenantFallback: true,
+            })
+            .catch((err) => console.error("Activity log failed:", err.message));
         }
         break;
       }
@@ -144,7 +158,7 @@ router.post("/webhook", async (req, res) => {
           // --- FINAL STATE IDEMPOTENCY ---
           if (tenant.subscription.lastInvoiceIdSent === invoice.id) {
             console.log("Invoice already processed, skipping:", invoice.id);
-            return;
+            break;
           }
 
           // Update subscription details
@@ -167,12 +181,30 @@ router.post("/webhook", async (req, res) => {
             "Saved PaymentIntent ID on invoice.payment_succeeded webhook",
             invoice.payment_intent
           );
+
+          activityLogger
+            .track({
+              req,
+              res,
+              user: { _id: null, role: "system" },
+              action: "STRIPE_PAYMENT_SUCCEDED",
+              resource: "BILLING",
+              extra: {
+                stripeEvent: event.type,
+                plan: tenant.subscription.plan,
+                amount: invoice?.amount_paid,
+                invoice,
+              },
+              allowUserTenantFallback: true,
+            })
+            .catch((err) => console.error("Activity log failed:", err.message));
         }
         break;
 
       case "invoice.payment_failed": {
+        const invoice = event.data.object;
         const tenant = await Tenant.findOne({
-          "subscription.stripeSubscriptionId": data.subscription,
+          "subscription.stripeSubscriptionId": invoice.subscription,
         });
         if (tenant) {
           tenant.subscription.status = "past_due";
@@ -183,6 +215,22 @@ router.post("/webhook", async (req, res) => {
             `<p>Hi ${tenant.name}</p>
              <p>Your payment for the <b>${tenant.subscription.plan}</b> plan failed. Please update your payment method.</p>`
           );
+          req.tenant = tenant;
+
+          activityLogger
+            .track({
+              req,
+              res,
+              user: { _id: null, role: "system" },
+              action: "STRIPE_PAYMENT_FAILED",
+              resource: "BILLING",
+              extra: {
+                stripeEvent: event.type,
+                invoice,
+              },
+              allowUserTenantFallback: true,
+            })
+            .catch((err) => console.error("Activity log failed:", err.message));
         }
         break;
       }
@@ -229,6 +277,21 @@ router.post("/webhook", async (req, res) => {
           refundAmount,
           refundId,
         });
+        activityLogger
+          .track({
+            req,
+            res,
+            user: { _id: null, role: "system" },
+            action: "STRIPE_SUBSCRIPTION_CANCELLED",
+            resource: "BILLING",
+            extra: {
+              stripeEvent: event.type,
+              plan: tenant.subscription.plan,
+              amount: refundAmount,
+            },
+            allowUserTenantFallback: true,
+          })
+          .catch((err) => console.error("Activity log failed:", err.message));
 
         break;
       }
@@ -259,6 +322,24 @@ router.post("/webhook", async (req, res) => {
         // DO NOT send email here
         // Email already sent in subscription.deleted
 
+        activityLogger
+          .track({
+            req,
+            res,
+            user: { _id: null, role: "system" },
+            action: "STRIPE_REFUND_CREATED",
+            resource: "BILLING",
+            extra: {
+              stripeEvent: event.type,
+              plan: tenant.subscription.plan,
+              amount: refund.amount,
+              refundId: refund.id,
+              chargeId: charge.id,
+            },
+            allowUserTenantFallback: true,
+          })
+          .catch((err) => console.error("Activity log failed:", err.message));
+
         break;
       }
 
@@ -267,6 +348,17 @@ router.post("/webhook", async (req, res) => {
     }
   } catch (err) {
     console.error("Error handling webhook event:", err);
+    activityLogger
+      .track({
+        req,
+        res,
+        user: { _id: null, role: "system" },
+        action: "STRIPE_WEBHOOK_FAILED",
+        resource: "BILLING",
+        extra: { stripeEvent: event.type, error: err.message },
+        allowUserTenantFallback: true,
+      })
+      .catch((err) => console.error("Activity log failed:", err.message));
   }
 
   // return 200 to Stripe

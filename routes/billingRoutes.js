@@ -10,19 +10,15 @@ const {
 } = require("../controllers/stripeControllers.js");
 const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
 const attachTenant = require("../middlewares/attachTenant.js");
-const {
-  auditLoggerMiddleware,
-} = require("../middlewares/auditLogMiddleware.js");
-const activityLogger = require("../middlewares/activityLogger.js");
+const withActivityLog = require("../utils/controllerLogger.js");
 
 router.post(
   "/subscribe",
   protect,
   tenantSubDomainMiddleware,
   attachTenant,
-  activityLogger("user subscribed"),
-  auditLoggerMiddleware("Tenant", "subscribed"),
   stripeSubscription
+  // withActivityLog(stripeSubscription, "SUBSCRIPTION")
 );
 router.get("/stripe-success", stripeSuccess);
 router.post(
@@ -30,8 +26,6 @@ router.post(
   protect,
   tenantSubDomainMiddleware,
   attachTenant,
-  activityLogger("user subscription cancelled"),
-  auditLoggerMiddleware("Tenant", "subscription-cancelled"),
   stripeCancelSubscription
 );
 
@@ -40,8 +34,7 @@ router.get(
   protect,
   tenantSubDomainMiddleware,
   attachTenant,
-  activityLogger("user subscription checked"),
-  stripeCheckSubscription
+  withActivityLog(stripeCheckSubscription, "SUBSCRIPTION_CHECKED")
 );
 
 module.exports = router;

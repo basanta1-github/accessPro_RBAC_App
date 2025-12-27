@@ -1,11 +1,6 @@
 const stripe = require("../config/stripe.js");
 const Tenant = require("../models/Tenant.js");
 const DOMAIN = process.env.CLIENT_URL || "http://localhost:5000";
-// const {
-//   sendCancellationEmail,
-//   sendInvoice,
-// } = require("../middlewares/stripeHandlers.js");
-
 const asyncHandler = require("../middlewares/asyncHandler.js");
 
 const NotificationService = require("../utils/notificationService");

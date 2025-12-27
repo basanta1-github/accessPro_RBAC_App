@@ -7,14 +7,11 @@ const {
   getAuditLogs,
   exportAuditLogsCSV,
 } = require("../controllers/auditController.js");
-const {
-  auditLoggerMiddleware,
-} = require("../middlewares/auditLogMiddleware.js");
 
 const restrictByPlan = require("../middlewares/planRestriction");
 const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
 const attachTenant = require("../middlewares/attachTenant.js");
-const activityLogger = require("../middlewares/activityLogger.js");
+const withActivityLog = require("../utils/controllerLogger.js");
 
 router.get(
   "/",
@@ -22,8 +19,7 @@ router.get(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["audit:view"]),
-  activityLogger("view audit logs"),
-  getAuditLogs
+  withActivityLog(getAuditLogs, "FETCHED_LOGS")
 );
 router.get(
   "/export",
@@ -32,9 +28,7 @@ router.get(
   attachTenant,
   authorize(["audit:view"]),
   restrictByPlan(["Pro", "Enterprise"]),
-  activityLogger("export audit csv"),
-  auditLoggerMiddleware("User", "csv-exported"),
-  exportAuditLogsCSV
+  withActivityLog(exportAuditLogsCSV, "CSV_EXPORTED")
 );
 
 module.exports = router;

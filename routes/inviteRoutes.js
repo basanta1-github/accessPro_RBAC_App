@@ -16,8 +16,8 @@ const {
 } = require("../controllers/userInviteController.js");
 const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
 const attachTenant = require("../middlewares/attachTenant.js");
-const activityLogger = require("../middlewares/activityLogger.js");
 const { cacheMiddleware } = require("../middlewares/cache.js");
+const withActivityLog = require("../utils/controllerLogger.js");
 
 router.post(
   "/invite",
@@ -26,12 +26,15 @@ router.post(
   attachTenant,
   restrictByUserLimit,
   authorize(["user:create"]),
-  activityLogger("invite user"),
-  auditLoggerMiddleware("User", "invited"),
-  inviteUser
+  withActivityLog(inviteUser, "INVITE_USER")
 );
 
-router.post("/accept-invite", activityLogger("accepted invite"), acceptInvite);
+router.post(
+  "/accept-invite",
+  withActivityLog(acceptInvite, "ACCEPT_INVITE", {
+    allowUserTenantFallback: true,
+  })
+);
 
 router.get(
   "/getUsers",
@@ -40,8 +43,7 @@ router.get(
   attachTenant,
   authorize(["user:view"]),
   cacheMiddleware((req) => `users:tenantId:${req.tenantId}`, 200),
-  activityLogger("get users"),
-  getUsers
+  withActivityLog(getUsers, "GET_USERS")
 );
 
 router.put(
@@ -50,9 +52,7 @@ router.put(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["user:update"]),
-  activityLogger("update user"),
-  auditLoggerMiddleware("User", "updated"),
-  updateUser
+  withActivityLog(updateUser, "UPDATE_USER")
 );
 
 router.put(
@@ -61,9 +61,7 @@ router.put(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["user:deactivated"]),
-  activityLogger("deactive users"),
-  auditLoggerMiddleware("User", "deactivated"),
-  deactiveUser
+  withActivityLog(deactiveUser, "DEACTIVE_USER")
 );
 
 module.exports = router;

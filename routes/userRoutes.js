@@ -3,9 +3,7 @@ const router = express.Router();
 
 const protect = require("../middlewares/authentication.js");
 const authorize = require("../middlewares/authorize.js");
-const {
-  auditLoggerMiddleware,
-} = require("../middlewares/auditLogMiddleware.js");
+
 const restrictByUserLimit = require("../middlewares/restrictByUserLimit.js");
 const {
   createUser,
@@ -16,7 +14,7 @@ const {
 } = require("../controllers/userActionControllers.js");
 const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
 const attachTenant = require("../middlewares/attachTenant.js");
-const activityLogger = require("../middlewares/activityLogger.js");
+const withActivityLog = require("../utils/controllerLogger.js");
 const { cacheMiddleware } = require("../middlewares/cache.js");
 
 router.get(
@@ -25,8 +23,7 @@ router.get(
   tenantSubDomainMiddleware,
   attachTenant,
   cacheMiddleware((req) => `users:tenantId:${req.tenantId}`, 300),
-  activityLogger("get users"),
-  getUsers
+  withActivityLog(getUsers, "VIEW_USERS")
 );
 router.post(
   "/create",
@@ -35,9 +32,7 @@ router.post(
   attachTenant,
   restrictByUserLimit,
   authorize(["user:create:employee", "user:create:admin"]),
-  activityLogger("user created"),
-  auditLoggerMiddleware("User", "created"),
-  createUser
+  withActivityLog(createUser, "CREATE_USER")
 );
 
 router.delete(
@@ -46,9 +41,7 @@ router.delete(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["user:delete:employee", "user:delete:admin"]),
-  activityLogger("user deleted"),
-  auditLoggerMiddleware("User", "deleted"),
-  deleteUser
+  withActivityLog(deleteUser, "DELETE_USER")
 );
 
 router.put(
@@ -57,9 +50,7 @@ router.put(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["user:deactivated"]),
-  activityLogger("user deactivated"),
-  auditLoggerMiddleware("User", "soft-delete"),
-  softDeleteUser
+  withActivityLog(softDeleteUser, "DEACTIVE_USER")
 );
 router.put(
   "/restore/:id",
@@ -67,9 +58,8 @@ router.put(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["user:restored"]),
-  activityLogger("user restored"),
-  auditLoggerMiddleware("User", "restore"),
-  restoreUser
+
+  withActivityLog(restoreUser, "RESTORE_USER")
 );
 
 module.exports = router;
