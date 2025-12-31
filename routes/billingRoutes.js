@@ -7,10 +7,10 @@ const {
   stripeSuccess,
   stripeCancelSubscription,
   stripeCheckSubscription,
-} = require("../controllers/stripeControllers.js");
+} = require("..//controllers/stripeControllers.js");
 const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
-const attachTenant = require("../middlewares/attachTenant.js");
-const withActivityLog = require("../utils/controllerLogger.js");
+const attachTenant = require("..//middlewares/attachTenant.js");
+const withActivityLog = require("../middlewares/controllerLogger.js");
 
 router.post(
   "/subscribe",

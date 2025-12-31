@@ -8,10 +8,10 @@ const {
   exportAuditLogsCSV,
 } = require("../controllers/auditController.js");
 
-const restrictByPlan = require("../middlewares/planRestriction");
+const restrictByPlan = require("../middlewares/planRestriction.js");
 const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
 const attachTenant = require("../middlewares/attachTenant.js");
-const withActivityLog = require("../utils/controllerLogger.js");
+const withActivityLog = require("../middlewares/controllerLogger.js");
 
 router.get(
   "/",

@@ -4,7 +4,7 @@ const stripe = require("../config/stripe.js");
 const Tenant = require("../models/Tenant.js");
 const { sendInvoiceEmail } = require("../utils/stripeEmail.js");
 const { doRefundIfNeeded } = require("../middlewares/stripeHandlers.js");
-const activityLogger = require("../middlewares/activityLogger.js");
+const activityLogger = require("../controllers/activityLogger.js");
 
 const NotificationService = require("../utils/notificationService.js");
 

@@ -14,7 +14,7 @@ const {
 } = require("../controllers/userActionControllers.js");
 const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
 const attachTenant = require("../middlewares/attachTenant.js");
-const withActivityLog = require("../utils/controllerLogger.js");
+const withActivityLog = require("../middlewares/controllerLogger.js");
 const { cacheMiddleware } = require("../middlewares/cache.js");
 
 router.get(

@@ -1,5 +1,5 @@
 // utils/controllerLogger.js
-const activityLogger = require("../middlewares/activityLogger");
+const activityLogger = require("../controllers/activityLogger");
 
 const withActivityLog = (
   controller,

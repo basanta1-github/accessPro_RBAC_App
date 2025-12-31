@@ -64,7 +64,6 @@ const activityLogger = {
             return clone;
           })(),
         },
-        timestamp: new Date(),
       };
 
       // async fire-and-forget

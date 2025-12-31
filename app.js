@@ -15,6 +15,7 @@ const tenantRoutes = require("./routes/tenantRoutes.js");
 const auditRoutes = require("./routes/auditRoutes.js");
 const billingRoutes = require("./routes/billingRoutes.js");
 const webhookHandlerRoute = require("./script/webhookHandlerRoute.js");
+const metricRoutes = require("./routes/metricRoutes.js");
 
 // at the top with other imports
 const testRoutes = require("./routes/testRoutes");
@@ -56,6 +57,7 @@ app.use("/inviteRoute", inviteRoutes);
 app.use("/tenants", tenantRoutes);
 app.use("/audit", auditRoutes);
 app.use("/api/billing", billingRoutes);
+app.use("/api/metrics", metricRoutes);
 
 // checking
 app.get("/", (req, res) => {

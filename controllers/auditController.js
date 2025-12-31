@@ -1,21 +1,9 @@
-const AuditLog = require("../models/auditLog");
+const ActivityMetric = require("../models/activityMetric");
 const asyncHandler = require("../middlewares/asyncHandler");
 const { Parser: Json2csvParser } = require("json2csv");
 
-/**
- * GET /api/audit
- * Query params:
- *  - page (default 1)
- *  - limit (default 25)
- *  - userId
- *  - action
- *  - resource
- *  - from (ISO date)
- *  - to (ISO date)
- */
-
 const getAuditLogs = asyncHandler(async (req, res) => {
-  const tenantId = req.tenantId;
+  const tenantId = req.tenant._id;
   const page = Math.max(1, parseInt(req.query.page || "1", 10));
   const limit = Math.max(
     1,
@@ -32,13 +20,13 @@ const getAuditLogs = asyncHandler(async (req, res) => {
 
   // date range
   if (req.query.from || req.query.to) {
-    filter.timestamp = {};
-    if (req.query.from) filter.timestamp.$gte = new Date(req.query.from);
-    if (req.query.to) filter.timestamp.$lte = new Date(req.query.to);
+    filter.createdAt = {};
+    if (req.query.from) filter.createdAt.$gte = new Date(req.query.from);
+    if (req.query.to) filter.createdAt.$lte = new Date(req.query.to);
   }
-  const total = await AuditLog.countDocuments(filter);
-  const logs = await AuditLog.find(filter)
-    .sort({ timestamp: -1 })
+  const total = await ActivityMetric.countDocuments(filter);
+  const logs = await ActivityMetric.find(filter)
+    .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit)
     .lean();
@@ -53,7 +41,7 @@ const getAuditLogs = asyncHandler(async (req, res) => {
  */
 
 const exportAuditLogsCSV = asyncHandler(async (req, res) => {
-  const tenantId = req.tenantId;
+  const tenantId = req.tenant._id;
 
   const filter = { tenantId };
 
@@ -61,29 +49,32 @@ const exportAuditLogsCSV = asyncHandler(async (req, res) => {
   if (req.query.action) filter.action = req.query.action;
   if (req.query.resource) filter.resource = req.query.resource;
   if (req.query.from || req.query.to) {
-    filter.timestamp = {};
-    if (req.query.from) filter.timestamp.$gte = new Date(req.query.from);
-    if (req.query.to) filter.timestamp.$lte = new Date(req.query.to);
+    filter.createdAt = {};
+    if (req.query.from) filter.createdAt.$gte = new Date(req.query.from);
+    if (req.query.to) filter.createdAt.$lte = new Date(req.query.to);
   }
   // fetch all matching (be cautious in prod; consider streaming / limits)
-  const logs = await AuditLog.find(filter).sort({ timestamp: -1 }).lean();
+  const logs = await ActivityMetric.find(filter).sort({ createdAt: -1 }).lean();
 
   // Prepare rows for CSV: flatten metadata to JSON-string to avoid nested issues
 
-  const rows = logs.map((r) => ({
-    tenantId: r.tenantId?.toString?.() || "",
-    userId: r.userId?.toString?.() || "",
-    action: r.action,
-    resource: r.resource,
-    timestamp: r.timestamp ? new Date(r.timestamp).toISOString() : "",
-    metadata: JSON.stringify(r.metadata || {}),
+  const rows = logs.map((l) => ({
+    tenantId: l.tenantId?.toString(),
+    userId: l.userId?.toString(),
+    role: l.role,
+    action: l.action,
+    resource: l.resource,
+    method: l.method,
+    path: l.path,
+    statusCode: l.statusCode,
+    success: l.success,
+    ip: l.ip,
+    createdAt: l.createdAt?.toISOString(),
+    metadata: JSON.stringify(l.metadata || {}),
   }));
-  const fields = req.query.fields
-    ? req.query.fields.split(",").map((f) => f.trim())
-    : ["tenantId", "userId", "action", "resource", "timestamp", "metadata"];
-
-  const opts = { fields };
-  const parser = new Json2csvParser(opts);
+  const parser = new Json2csvParser({
+    fields: Object.keys(rows[0] || {}),
+  });
   const csv = parser.parse(rows);
 
   res.header("Content-Type", "text/csv");

@@ -1,21 +1,17 @@
 // routes/adminRoutes.js
 const express = require("express");
 const router = express.Router();
-const Tenant = require("../models/Tenant");
+const Tenant = require("../models/Tenant.js");
 const protect = require("../middlewares/authentication.js");
-const createDefaultRoles = require("../utils/createDefaultroles");
-const {
-  auditLoggerMiddleware,
-} = require("../middlewares/auditLogMiddleware.js");
-const activityLogger = require("../middlewares/activityLogger.js");
+const createDefaultRoles = require("../utils/createDefaultroles.js");
+const withActivityLog = require("../middlewares/controllerLogger.js");
 
 // Only for admins or owner
 router.post(
   "/sync-roles",
   protect,
   // activityLogger("roles synced"),
-  auditLoggerMiddleware("User", "roles-updated"),
-  async (req, res) => {
+  withActivityLog(async (req, res) => {
     if (req.user.role !== "owner") {
       res.status(403).json({
         message:
@@ -33,7 +29,7 @@ router.post(
       console.error("Error syncing roles:", err);
       res.status(500).json({ message: "Error syncing roles" });
     }
-  }
+  }, "ROLES_SYNCED")
 );
 
 module.exports = router;

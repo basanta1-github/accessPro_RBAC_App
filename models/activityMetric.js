@@ -32,4 +32,9 @@ const activityMetricSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("ActivityMetric", activityMetricSchema);
+activityMetricSchema.index({ tenantId: 1, createdAt: -1 });
+activityMetricSchema.index({ tenantId: 1, action: 1, createdAt: -1 });
+activityMetricSchema.index({ createdAt: -1 });
+
+const activityMetric = mongoose.model("ActivityMetric", activityMetricSchema);
+module.exports = activityMetric;

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const withActivityLog = require("../utils/controllerLogger");
+const withActivityLog = require("../middlewares/controllerLogger");
 const protect = require("../middlewares/authentication");
 const {
   register,

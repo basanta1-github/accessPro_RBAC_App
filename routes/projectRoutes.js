@@ -3,9 +3,6 @@ const router = express.Router();
 
 const protect = require("../middlewares/authentication.js");
 const authorize = require("../middlewares/authorize.js");
-const {
-  auditLoggerMiddleware,
-} = require("../middlewares/auditLogMiddleware.js");
 const tenantSubDomainMiddleware = require("../middlewares/tenantSubDomain.js");
 const attachTenant = require("../middlewares/attachTenant.js");
 const {
@@ -17,7 +14,7 @@ const {
   restoreProject,
 } = require("../controllers/projectControllers.js");
 const { cacheMiddleware } = require("../middlewares/cache.js");
-const withActivityLog = require("../utils/controllerLogger.js");
+const withActivityLog = require("../middlewares/controllerLogger.js");
 
 // create new project
 router.post(
