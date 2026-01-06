@@ -16,7 +16,7 @@ const withActivityLog = (
     // Intercept res.status and res.json
     res.status = (code) => {
       statusCode = code;
-      return res;
+      return originalStatus(code);
     };
 
     res.json = (body) => {
@@ -30,9 +30,9 @@ const withActivityLog = (
       const reason = body?.message || body?.error || null;
 
       // Fire-and-forget logging
-      setImmediate(() => {
-        activityLogger
-          .track({
+      setImmediate(async () => {
+        try {
+          await activityLogger.track({
             req,
             res,
             user: req.user || null,
@@ -41,10 +41,10 @@ const withActivityLog = (
             extra: { reason },
             allowUserTenantFallback:
               activityOptions.allowUserTenantFallback || false,
-          })
-          .catch((error) => {
-            console.error("Activity Log Error:", error);
           });
+        } catch (error) {
+          console.error("Activity Log Error:", error);
+        }
       });
 
       return originalJson(body);
@@ -55,8 +55,8 @@ const withActivityLog = (
     } catch (err) {
       statusCode = 500;
       responseBody = { message: err.message };
-      activityLogger
-        .track({
+      try {
+        await activityLogger.track({
           req,
           res,
           user: req.user || null,
@@ -65,10 +65,10 @@ const withActivityLog = (
           extra: { reason: err.message },
           allowUserTenantFallback:
             activityOptions.allowUserTenantFallback || false,
-        })
-        .catch((error) => {
-          console.error("Activity Log Error:", error);
         });
+      } catch (error) {
+        console.error("Activity Log Error:", error);
+      }
       return originalStatus(500).json(responseBody);
     }
   };

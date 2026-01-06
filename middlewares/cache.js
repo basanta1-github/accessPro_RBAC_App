@@ -6,6 +6,10 @@ const redisClient = require("../config/redisClient");
 
 const cacheMiddleware = (keyGenerator, expirationInSeconds = 60) => {
   return async (req, res, next) => {
+    if (process.env.NODE_ENV === "test") {
+      return next();
+    }
+
     try {
       const key = keyGenerator(req);
       const cachedData = await redisClient.get(key);
@@ -35,6 +39,8 @@ const cacheMiddleware = (keyGenerator, expirationInSeconds = 60) => {
  */
 
 const invalidateCache = async (keyPattern) => {
+  // ✅ No cache in tests
+  if (process.env.NODE_ENV === "test") return;
   try {
     if (keyPattern.includes("*")) {
       // pattern matching

@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: "true",
     },
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true, index: true },
     password: {
       type: String,
       required: true,
@@ -23,9 +23,9 @@ const userSchema = new mongoose.Schema(
       ref: "Tenant",
       required: "true",
     },
-    companyName: {
-      type: String,
-    },
+    // companyName: {
+    //   type: String,
+    // },
     isActive: {
       type: Boolean,
       default: true,
@@ -55,15 +55,24 @@ userSchema.pre("save", async function (next) {
   next();
 });
 // Middleware to automatically handle missing isDeleted in queries
-userSchema.pre(/^find/, function (next) {
-  if (!this.getQuery().hasOwnProperty("isDeleted")) {
-    // Include only documents where isDeleted is false or missing
-    this.where({
-      $or: [{ isDeleted: false }, { isDeleted: { $exists: false } }],
-    });
+userSchema.statics.softDeleteById = async function (id) {
+  const user = await this.findById(id).setOptions({
+    _skipSoftDelete: [this.modelName],
+  });
+  if (!user) {
+    throw new Error("User not found");
   }
-  next();
-});
+  if (user.isDeleted) throw new Error("User is already soft-deleted");
+
+  user.isDeleted = true;
+  await user.save();
+  return user;
+};
+
+// // Track original value
+// userSchema.pre("init", function (doc) {
+//   this._originalIsDeleted = doc.isDeleted;
+// });
 // compare passwords
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);

@@ -1,4 +1,3 @@
-// utils/activityLogger.js
 const ActivityMetric = require("../models/activityMetric");
 
 const activityLogger = {
@@ -19,6 +18,7 @@ const activityLogger = {
     extra = {},
     allowUserTenantFallback = false,
   }) => {
+    if (process.env.NODE_ENV === "test") return Promise.resolve(); // skip all logging in tests
     try {
       const tenantId = req.tenant?._id;
       const userId = user?._id;
@@ -80,3 +80,4 @@ const activityLogger = {
 };
 
 module.exports = activityLogger;
+// }

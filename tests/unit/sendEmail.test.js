@@ -18,8 +18,8 @@ describe("email utilities", () => {
     });
 
     // import  after mock
-    sendInviteEmail = require("../../utils/sendEmail");
-    sendPasswordResetEmail = require("../../utils/sendPasswordResetEmail");
+    sendInviteEmail = require("../../utils/htmltemplates/sendEmail");
+    sendPasswordResetEmail = require("../../utils/htmltemplates/sendPasswordResetEmail");
   });
   test("sendInviteEmail sends email with corect subject ans recipient", async () => {
     const email = "user@example.com";

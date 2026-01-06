@@ -3,6 +3,8 @@ const User = require("../models/User");
 const Roles = require("../models/Roles");
 const bcrypt = require("bcrypt");
 const passwordPolicy = require("../utils/passwordPolicy");
+const crypto = require("crypto");
+const sendPasswordResetEmail = require("../utils/htmltemplates/sendPasswordResetEmail");
 
 const {
   generateAccessToken,
@@ -104,7 +106,13 @@ const login = async (req, res) => {
         .status(400)
         .json({ message: "please provide password email and comany name" });
     }
-    const user = await User.findOne({ email, companyName });
+    const name = companyName;
+
+    const tenant = await Tenant.findOne({ name });
+    if (!tenant) {
+      return res.status(400).json({ message: "Invalid company name" });
+    }
+    const user = await User.findOne({ email, tenantId: tenant._id });
     if (!user)
       return res
         .status(400)
@@ -118,7 +126,7 @@ const login = async (req, res) => {
       });
     }
     const isMatch = await user.matchPassword(password);
-    if (!isMatch || !user) {
+    if (!isMatch) {
       // Fake "user" for logging purposes
       req.user = {
         _id: null, // unknown user ID
@@ -174,10 +182,8 @@ const login = async (req, res) => {
     }
 
     // no 2fa -> issue tokens
-    user.lastLogin = new Date();
-    await user.save();
 
-    req.user = user;
+    // req.user = user;
 
     const role = await Roles.findOne({
       name: user.role,
@@ -199,10 +205,6 @@ const login = async (req, res) => {
       refreshToken,
       email: user.email,
     });
-    try {
-    } catch (err) {
-      console.log(err, "error fetching the login data");
-    }
   } catch (error) {
     console.log(error);
   }
@@ -249,7 +251,7 @@ const logout = async (req, res) => {
   if (token) {
     // store token in blacklist
     const decoded = jwt.decode(token);
-    console.log(decoded);
+    // console.log(decoded);
     const expiresAt = new Date(decoded.exp * 1000);
     await BlackListedTokens.create({ token, expiresAt });
   }
@@ -296,6 +298,11 @@ const directResetPassword = async (req, res) => {
     }
     user.password = newPassword;
     await user.save();
+    // ✅ Generate a dummy reset link for email
+    const resetToken = crypto.randomBytes(20).toString("hex");
+    const resetLink = `https://app.accesspro.com/reset-password/${resetToken}`;
+
+    await sendPasswordResetEmail(user, resetLink);
 
     req.user = user;
     req.tenant = { _id: user.tenantId }; // optional for logging

@@ -3,7 +3,7 @@ const app = require("../../app.js");
 const BlackListedTokens = require("../../models/blackListedToken.js");
 const User = require("../../models/User.js");
 const jwt = require("jsonwebtoken");
-const Tenant = require("../../models/Tenant");
+const Tenant = require("../../models/Tenant.js");
 
 describe("Auth Middleware", () => {
   let token;

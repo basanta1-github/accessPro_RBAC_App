@@ -65,7 +65,7 @@ const createdefaultRoles = async (tenantId) => {
       // merge existing permissions with the new permissions and remove the duplocates
       existingRole.permissions = Array.from(new Set([...role.permissions]));
       await existingRole.save();
-      console.log(`Updated permissions for role: ${role.name}`);
+      // console.log(`Updated permissions for role: ${role.name}`);
     } else {
       // create roles if not exists
       await Roles.create({
@@ -73,7 +73,7 @@ const createdefaultRoles = async (tenantId) => {
         tenantId,
         permissions: Array.from(new Set(role.permissions)),
       });
-      console.log(`Created Role: ${role.name}`);
+      // console.log(`Created Role: ${role.name}`);
     }
   }
 };

@@ -3,16 +3,21 @@ module.exports = function softDeletePlugin(schema, options = {}) {
   // here in the skip path we can insert the filename which we want to skip and is passed in the schema
   // like userSchema.plugin(softDeletePlugin, { skipPaths: ['someController.js'] });
   function addIsDeletedFilter(next) {
-    const modelName = this.model.modelName;
-    const skipFor = this.options._skipSoftDelete || [];
+    // Check if query has skip flag
+    const skipSoftDelete = this.options?._skipSoftDelete || [];
 
-    // if current path.controller is in the skip list, do nothing
-    if (skipFor.includes(modelName)) return next();
+    if (skipSoftDelete.includes(this.model.modelName)) {
+      return next(); // bypass soft-delete filter
+    }
 
     // apply filter only if isDeleted field exists
-    if (schema.paths.isDeleted) {
-      if (!this.getFilter().hasOwnProperty("isDeleted")) {
-        this.setQuery({ ...this.getFilter(), isDeleted: { $ne: true } });
+    if (this.model.schema.paths.isDeleted) {
+      const filter = this.getFilter();
+      if (!filter.hasOwnProperty("isDeleted")) {
+        this.setQuery({ ...filter, isDeleted: { $ne: true } });
+      } else if (filter.isDeleted === true) {
+        // Already soft-deleted? Throw an error for safety
+        return next(new Error("Document is already soft-deleted"));
       }
     }
     next();

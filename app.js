@@ -17,14 +17,6 @@ const billingRoutes = require("./routes/billingRoutes.js");
 const webhookHandlerRoute = require("./script/webhookHandlerRoute.js");
 const metricRoutes = require("./routes/metricRoutes.js");
 
-// at the top with other imports
-const testRoutes = require("./routes/testRoutes");
-
-// Mount test routes only in test environment
-if (process.env.NODE_ENV === "test") {
-  app.use("/api", testRoutes);
-}
-
 const errorHandler = require("./middlewares/errorHandler");
 // app rate limiter
 const appRateLimiter = require("./middlewares/rateLimiter/appRateLimit.js");
