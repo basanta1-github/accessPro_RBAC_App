@@ -28,6 +28,7 @@ router.get(
   cacheMiddleware((req) => `tenant:${req.params.id}`, 600),
   tenantSubDomainMiddleware,
   attachTenant,
+  authorize(["tenant:view"]),
   withActivityLog(getTenant, "VIEW_TENANT")
 );
 router.put(
@@ -43,7 +44,7 @@ router.put(
   protect,
   tenantSubDomainMiddleware,
   attachTenant,
-  authorize(["tenant:deactive"]),
+  authorize(["tenant:deactivated"]),
   withActivityLog(deactiveTenant, "DEACTIVE_TENANT")
 );
 

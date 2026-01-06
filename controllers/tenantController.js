@@ -69,7 +69,7 @@ const updateTenant = asyncHandler(async (req, res) => {
   await TenantAuditLog.create({
     tenantId: tenant._id,
     action: "update",
-    performedBy: req.user.userId,
+    performedBy: req.user._id,
     changes,
   });
   res.status(200).json({ message: "tenant updated", tenant });
@@ -91,7 +91,7 @@ const deactiveTenant = asyncHandler(async (req, res) => {
   await TenantAuditLog.create({
     tenantId: tenant._id,
     action: "deactive",
-    performedBy: req.user.userId,
+    performedBy: req.user._id,
   });
   res.status(200).json({ message: "Tenant Deactivated", tenant });
 });

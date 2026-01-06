@@ -9,6 +9,10 @@ const tenantSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    status: {
+      type: String,
+      default: "active",
+    },
     domain: {
       type: String,
       unique: true,
