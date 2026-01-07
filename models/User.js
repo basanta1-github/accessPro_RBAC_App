@@ -54,20 +54,21 @@ userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
-// Middleware to automatically handle missing isDeleted in queries
-userSchema.statics.softDeleteById = async function (id) {
-  const user = await this.findById(id).setOptions({
-    _skipSoftDelete: [this.modelName],
-  });
-  if (!user) {
-    throw new Error("User not found");
-  }
-  if (user.isDeleted) throw new Error("User is already soft-deleted");
+// plugin to automatically handle missing isDeleted in queries
+userSchema.plugin(softDeletePlugin);
+// userSchema.statics.softDeleteById = async function (id) {
+//   const user = await this.findById(id).setOptions({
+//     _skipSoftDelete: [this.modelName],
+//   });
+//   if (!user) {
+//     throw new Error("User not found");
+//   }
+//   if (user.isDeleted) throw new Error("User is already soft-deleted");
 
-  user.isDeleted = true;
-  await user.save();
-  return user;
-};
+//   user.isDeleted = true;
+//   await user.save();
+//   return user;
+// };
 
 // // Track original value
 // userSchema.pre("init", function (doc) {

@@ -126,6 +126,26 @@ describe("User Routes Integration Tests", () => {
       expect(res.body.total).toBe(3);
       expect(res.body.users.map((u) => u.email)).toContain("admin@example.com");
     });
+    it("separate tenants user  cannot access", async () => {
+      const separatetenant = await Tenant.create({
+        name: "separateTestCompany",
+        domain: "separatetestDomain",
+        email: "separate@example.com",
+      });
+      const tokens = await getAuthTokens({
+        email: employee.email,
+        password: "StrongPass1!",
+        companyName: tenant.name,
+      });
+
+      const res = await request(app)
+        .get("/api/users/getUsers")
+        .set("Authorization", `Bearer ${tokens.accessToken}`)
+        .set("x-tenant", separatetenant.domain);
+
+      expect(res.statusCode).toBe(403);
+      expect(res.body.message).toMatch(/Cross-tenant access/i);
+    });
   });
 
   describe("POST /create", () => {
@@ -241,6 +261,34 @@ describe("User Routes Integration Tests", () => {
 
       expect(res.statusCode).toBe(403);
     });
+    it("separate tenants user  cannot access", async () => {
+      const separatetenant = await Tenant.create({
+        name: "separateTestCompany",
+        domain: "separatetestDomain",
+        email: "separate@example.com",
+      });
+      const tokens = await getAuthTokens({
+        email: employee.email,
+        password: "StrongPass1!",
+        companyName: tenant.name,
+      });
+
+      const newemployee = {
+        name: "New employee",
+        email: "newemployee@example.com",
+        password: "StrongPass1!",
+        role: "employee",
+        companyName: admin.companyName,
+      };
+      const res = await request(app)
+        .post("/api/users/create")
+        .set("Authorization", `Bearer ${tokens.accessToken}`)
+        .set("x-tenant", separatetenant.domain)
+        .send(newemployee);
+
+      expect(res.statusCode).toBe(403);
+      expect(res.body.message).toMatch(/Cross-tenant access/i);
+    });
   });
 
   describe("DELETE /delete/:id", () => {
@@ -300,6 +348,26 @@ describe("User Routes Integration Tests", () => {
         .set("x-tenant", tenant.domain);
       expect(res.statusCode).toBe(403);
       expect(res.body.message).toMatch(/access denied/i);
+    });
+    it("separate tenants user  cannot access", async () => {
+      const separatetenant = await Tenant.create({
+        name: "separateTestCompany",
+        domain: "separatetestDomain",
+        email: "separate@example.com",
+      });
+      const tokens = await getAuthTokens({
+        email: employee.email,
+        password: "StrongPass1!",
+        companyName: tenant.name,
+      });
+
+      const res = await request(app)
+        .delete(`/api/users/delete/${employee._id}`)
+        .set("Authorization", `Bearer ${tokens.accessToken}`)
+        .set("x-tenant", separatetenant.domain);
+
+      expect(res.statusCode).toBe(403);
+      expect(res.body.message).toMatch(/Cross-tenant access/i);
     });
   });
 
@@ -380,6 +448,26 @@ describe("User Routes Integration Tests", () => {
 
       expect(res.statusCode).toBe(403);
       expect(res.body.message).toMatch(/access denied/i);
+    });
+    it("separate tenants user  cannot access", async () => {
+      const separatetenant = await Tenant.create({
+        name: "separateTestCompany",
+        domain: "separatetestDomain",
+        email: "separate@example.com",
+      });
+      const tokens = await getAuthTokens({
+        email: employee.email,
+        password: "StrongPass1!",
+        companyName: tenant.name,
+      });
+
+      const res = await request(app)
+        .put(`/api/users/soft-delete/${employee._id}`)
+        .set("Authorization", `Bearer ${tokens.accessToken}`)
+        .set("x-tenant", separatetenant.domain);
+
+      expect(res.statusCode).toBe(403);
+      expect(res.body.message).toMatch(/Cross-tenant access/i);
     });
   });
   describe("Restore", () => {
@@ -500,6 +588,15 @@ describe("User Routes Integration Tests", () => {
     });
 
     it("cannot restore an active user", async () => {
+      employee = await User.create({
+        name: "Employee User",
+        email: "employee@example1.com",
+        password: "StrongPass1!",
+        role: "employee",
+        companyName: tenant.name,
+        tenantId: tenant._id,
+        isDeleted: false, // raw creation soft-deleted/not-deleted
+      });
       const tokens = await getAuthTokens({
         email: owner.email,
         password: "StrongPass1!",
@@ -507,12 +604,31 @@ describe("User Routes Integration Tests", () => {
       });
 
       const res = await request(app)
-        .put(`/api/users/restore/${owner._id}`)
+        .put(`/api/users/restore/${employee._id}`)
         .set("Authorization", `Bearer ${tokens.accessToken}`)
         .set("x-tenant", tenant.domain);
 
       expect(res.statusCode).toBe(404);
-      expect(res.body.message).toMatch(/not deactivated/i);
+      expect(res.body.message).toMatch(/not deleted/i);
+    });
+    it("separate tenants user  cannot access", async () => {
+      const separatetenant = await Tenant.create({
+        name: "separateTestCompany",
+        domain: "separatetestDomain",
+        email: "separate@example.com",
+      });
+      const tokens = await getAuthTokens({
+        email: owner.email,
+        password: "StrongPass1!",
+        companyName: tenant.name,
+      });
+      const res = await request(app)
+        .put(`/api/users/restore/${employee._id}`)
+        .set("Authorization", `Bearer ${tokens.accessToken}`)
+        .set("x-tenant", separatetenant.domain);
+
+      expect(res.statusCode).toBe(403);
+      expect(res.body.message).toMatch(/Cross-tenant access/i);
     });
   });
 });

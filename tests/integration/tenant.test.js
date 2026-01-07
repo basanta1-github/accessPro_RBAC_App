@@ -136,6 +136,31 @@ describe("Tenant Routes Integration Tests", () => {
       expect(res.statusCode).toBe(403);
       expect(res.body.message).toMatch(/access denied/i);
     });
+    it("separate tenants user  cannot access", async () => {
+      const tokens = await getAuthTokens({
+        email: owner.email,
+        password: "StrongPass1!",
+        companyName: tenant.name,
+      });
+      const separatetenant = await Tenant.create({
+        name: "separateTestCompany",
+        domain: "separatetestDomain",
+        email: "separate@example.com",
+      });
+      const otherTenant = await Tenant.create({
+        name: "OtherTenant",
+        domain: "otherDomain",
+        email: "other@example.com",
+      });
+
+      const res = await request(app)
+        .get(`/tenants/${otherTenant._id}`)
+        .set("Authorization", `Bearer ${tokens.accessToken}`)
+        .set("x-tenant", separatetenant.domain);
+
+      expect(res.statusCode).toBe(403);
+      expect(res.body.message).toMatch(/Cross-tenant access/i);
+    });
   });
 
   describe("PUT /tenants/:id/update", () => {
@@ -195,6 +220,27 @@ describe("Tenant Routes Integration Tests", () => {
 
       expect(res.statusCode).toBe(403);
       expect(res.body.message).toMatch(/denied/i);
+    });
+    it("separate tenants user  cannot access", async () => {
+      const tokens = await getAuthTokens({
+        email: owner.email,
+        password: "StrongPass1!",
+        companyName: tenant.name,
+      });
+      const separatetenant = await Tenant.create({
+        name: "separateTestCompany",
+        domain: "separatetestDomain",
+        email: "separate@example.com",
+      });
+
+      const res = await request(app)
+        .put(`/tenants/${tenant._id}/update`)
+        .set("Authorization", `Bearer ${tokens.accessToken}`)
+        .set("x-tenant", separatetenant.domain)
+        .send({ name: "UpdatedCompany" });
+
+      expect(res.statusCode).toBe(403);
+      expect(res.body.message).toMatch(/Cross-tenant access/i);
     });
 
     it("cannot update tenant if tenantId mismatch", async () => {
@@ -266,6 +312,27 @@ describe("Tenant Routes Integration Tests", () => {
         .set("x-tenant", tenant.domain);
       expect(res.statusCode).toBe(403);
       expect(res.body.message).toMatch(/access denied/i);
+    });
+    it("separate tenants user  cannot access", async () => {
+      const tokens = await getAuthTokens({
+        email: owner.email,
+        password: "StrongPass1!",
+        companyName: tenant.name,
+      });
+      const separatetenant = await Tenant.create({
+        name: "separateTestCompany",
+        domain: "separatetestDomain",
+        email: "separate@example.com",
+      });
+
+      const res = await request(app)
+        .put(`/tenants/${tenant._id}/update`)
+        .set("Authorization", `Bearer ${tokens.accessToken}`)
+        .set("x-tenant", separatetenant.domain)
+        .send({ name: "UpdatedCompany" });
+
+      expect(res.statusCode).toBe(403);
+      expect(res.body.message).toMatch(/Cross-tenant access/i);
     });
   });
 });

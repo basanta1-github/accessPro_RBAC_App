@@ -119,23 +119,23 @@ const deleteUser = asyncHandler(async (req, res) => {
 const softDeleteUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
-    const user = await User.softDeleteById(id);
-    // const user = await User.findOne({
-    //   _id: new mongoose.Types.ObjectId(id),
-    //   tenantId: req.tenantId,
-    // }).setOptions({ _skipSoftDelete: ["User"] });
+    // const user = await User.softDeleteById(id);
+    const user = await User.findOne({
+      _id: id,
+      tenantId: req.tenantId,
+      isDeleted: false,
+    }).setOptions({ _skipSoftDelete: ["User"] });
 
-    // if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user)
+      return res
+        .status(404)
+        .json({ message: "User not found or already soft deleted" });
 
     // Prevent self-deletion
     if (user._id.equals(req.user._id)) {
       return res.status(400).json({ message: "You cannot delete yourself" });
     }
 
-    // // Already deleted?
-    // if (user.isDeleted) {
-    //   return res.status(400).json({ message: "User is already soft-deleted" });
-    // }
     // Role-based permission check
     const requesterRole = req.user.role; // assume roles: 'owner', 'admin', 'employee'
     const targetRole = user.role;
@@ -163,12 +163,12 @@ const softDeleteUser = asyncHandler(async (req, res) => {
     res.json({ message: `User ${user.name} soft deleted` });
   } catch (err) {
     // handle errors thrown from the static method
-    if (
-      err.message === "User not found" ||
-      err.message === "User is already soft-deleted"
-    ) {
-      return res.status(404).json({ message: err.message });
-    }
+    // if (
+    //   err.message === "User not found" ||
+    //   err.message === "User is already soft-deleted"
+    // ) {
+    //   return res.status(404).json({ message: err.message });
+    // }
     // unexpected errors
     res.status(500).json({ message: "Server error", error: err.message });
   }
@@ -179,8 +179,9 @@ const restoreUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
   // fetch user
   const user = await User.findOne({
-    _id: new mongoose.Types.ObjectId(id),
+    _id: id,
     tenantId: req.tenantId,
+    isDeleted: true,
   }).setOptions({ _skipSoftDelete: ["User"] });
 
   if (!user)

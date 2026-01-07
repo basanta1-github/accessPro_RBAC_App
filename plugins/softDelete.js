@@ -15,10 +15,11 @@ module.exports = function softDeletePlugin(schema, options = {}) {
       const filter = this.getFilter();
       if (!filter.hasOwnProperty("isDeleted")) {
         this.setQuery({ ...filter, isDeleted: { $ne: true } });
-      } else if (filter.isDeleted === true) {
-        // Already soft-deleted? Throw an error for safety
-        return next(new Error("Document is already soft-deleted"));
       }
+      // else if (filter.isDeleted === true) {
+      //   // Already soft-deleted? Throw an error for safety
+      //   return next(new Error("Document is already soft-deleted"));
+      // }
     }
     next();
   }

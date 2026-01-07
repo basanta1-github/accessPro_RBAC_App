@@ -2,6 +2,7 @@ const Project = require("../models/Project.js");
 const asyncHandler = require("../middlewares/asyncHandler");
 const User = require("../models/User.js");
 const mongoose = require("mongoose");
+const { invalidateCache } = require("../middlewares/cache.js");
 
 // create project owner and admin only
 const createProject = asyncHandler(async (req, res) => {
@@ -38,7 +39,7 @@ const createProject = asyncHandler(async (req, res) => {
     description,
     assignedTo: validEmployeeIds.map((e) => e._id),
     tenantId: req.tenantId,
-    createdBy: currentUser.userId,
+    createdBy: currentUser._id,
   });
 
   await invalidateCache(`projects:tenantId:${req.tenantId}`);
@@ -52,17 +53,16 @@ const getProjects = asyncHandler(async (req, res) => {
   const currentUser = req.user;
   let projects;
 
-  if (["owner", "admin"].includes(currentUser.role)) {
-    projects = await Project.find({ tenantId: req.tenantId });
-  } else if (currentUser.role === "employee") {
-    //employees only sees the assigned projects
-
+  if (currentUser.role === "employee") {
     projects = await Project.find({
       tenantId: req.tenantId,
-      assignedTo: currentUser.userId,
+      assignedTo: currentUser._id, // only assigned projects
     });
+    if (projects.length === 0) {
+      return res.status(404).json({ message: "No projects found" });
+    }
   } else {
-    return res.status(403).json({ message: "Unauthorized Access" });
+    projects = await Project.find({ tenantId: req.tenantId });
   }
 
   if (!projects || projects.length === 0) {
@@ -83,7 +83,7 @@ const updateProject = asyncHandler(async (req, res) => {
   const currentUser = req.user;
   const project = await Project.findOne({
     _id: req.params.id,
-    tenantId: req.tenantId,
+    tenantId: req.tenant._id,
   });
 
   if (!project) return res.status(404).json({ message: "project not found" });
@@ -93,18 +93,24 @@ const updateProject = asyncHandler(async (req, res) => {
   if (
     currentUser.role === "employee" &&
     !project.assignedTo.some(
-      (id) => id.toString() === currentUser.userId.toString()
+      (id) => id.toString() === currentUser._id.toString()
     )
   ) {
     return res
       .status(403)
-      .json({ messsage: "not allowed to update this project" });
+      .json({ messsage: "you are not assigned for this project" });
   }
 
-  // non admins cant update if they dont own it
-  if (!["owner", "admin", "employee"].includes(currentUser.role)) {
-    return res.status(403).json({ message: "not allowed" });
+  // Admin/Owner can only update if they are the creator
+  if (
+    ["admin"].includes(currentUser.role) &&
+    project.createdBy.toString() !== currentUser._id.toString()
+  ) {
+    return res.status(403).json({
+      message: "not allowed to update project created by another admin/owner",
+    });
   }
+
   const updated = await Project.findByIdAndUpdate(
     { _id: req.params.id, tenantId: req.tenantId },
     req.body,

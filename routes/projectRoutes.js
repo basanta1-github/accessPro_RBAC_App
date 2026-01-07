@@ -67,7 +67,7 @@ router.put(
   tenantSubDomainMiddleware,
   attachTenant,
   authorize(["project:restored"]),
-  withActivityLog(restoreProject, "DEACTIVE_PROJECT")
+  withActivityLog(restoreProject, "RESTORE_PROJECT")
 );
 
 module.exports = router;
