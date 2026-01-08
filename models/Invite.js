@@ -10,8 +10,8 @@ const inviteSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["Admin", "employee"],
-      default: "Employee",
+      enum: ["admin", "employee"],
+      default: "employee",
     },
     token: { type: String, required: true },
     expiresAt: { type: Date, required: true },

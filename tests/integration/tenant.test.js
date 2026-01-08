@@ -1,4 +1,12 @@
-// tests/integration/tenantRoutes.test.js
+jest.mock("../../middlewares/cache", () => ({
+  cacheMiddleware: jest.fn(() => (req, res, next) => next()),
+  invalidateCache: jest.fn(() => Promise.resolve(true)),
+}));
+jest.mock(
+  "../../middlewares/controllerLogger",
+  () => (controller, action) => controller
+);
+
 const request = require("supertest");
 const app = require("../../app");
 const Tenant = require("../../models/Tenant");

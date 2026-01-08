@@ -28,14 +28,14 @@
 // jest.mock("../../controllers/activityLogger", () => ({
 //   track: jest.fn(() => Promise.resolve()),
 // }));
-// jest.mock(
-//   "../../middlewares/controllerLogger",
-//   () => (controller, action) => controller
-// );
-// jest.mock("../../middlewares/cache", () => ({
-//   cacheMiddleware: jest.fn(() => (req, res, next) => next()),
-//   invalidateCache: jest.fn(() => Promise.resolve(true)),
-// }));
+jest.mock(
+  "../../middlewares/controllerLogger",
+  () => (controller, action) => controller
+);
+jest.mock("../../middlewares/cache", () => ({
+  cacheMiddleware: jest.fn(() => (req, res, next) => next()),
+  invalidateCache: jest.fn(() => Promise.resolve(true)),
+}));
 
 // jest.setTimeout(30000);
 
@@ -62,21 +62,6 @@ describe("User Routes Integration Tests", () => {
       domain: "testDomain",
       email: "owner@example.com",
     });
-
-    // Create roles
-    // await Roles.create([
-    //   {
-    //     name: "owner",
-    //     tenantId: tenant._id,
-    //     permissions: ["user:create:admin", "user:create:employee"],
-    //   },
-    //   {
-    //     name: "admin",
-    //     tenantId: tenant._id,
-    //     permissions: ["user:create:employee"],
-    //   },
-    //   { name: "employee", tenantId: tenant._id, permissions: [] },
-    // ]);
 
     await createDefaultRoles(tenant._id);
 

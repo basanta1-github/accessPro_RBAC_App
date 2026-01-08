@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
-// const app = require("../app");
 let mongo;
-// app.set("trust proxy", true);
 beforeAll(async () => {
   mongo = await MongoMemoryServer.create();
   const uri = mongo.getUri();
@@ -18,12 +16,16 @@ beforeAll(async () => {
 
 afterEach(async () => {
   const collections = await mongoose.connection.db.collections();
-  for (const key in collections) {
-    await collections[key].deleteMany({});
+  for (const collection of collections) {
+    await collection.deleteMany({});
   }
 });
 afterAll(async () => {
-  await mongoose.connection.dropDatabase();
-  await mongoose.connection.close();
-  await mongo.stop();
+  if (mongoose.connection.readyState !== 0) {
+    await mongoose.connection.dropDatabase();
+    await mongoose.connection.close();
+  }
+  if (mongo) {
+    await mongo.stop();
+  }
 });

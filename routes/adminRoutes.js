@@ -13,7 +13,7 @@ router.post(
   // activityLogger("roles synced"),
   withActivityLog(async (req, res) => {
     if (req.user.role !== "owner") {
-      res.status(403).json({
+      return res.status(403).json({
         message:
           "you are not authorized to use this route please ask your owner",
       });

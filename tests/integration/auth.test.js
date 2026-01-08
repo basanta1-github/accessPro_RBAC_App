@@ -1,10 +1,14 @@
-jest.mock("../../utils/htmltemplates/sendPasswordResetEmail", () =>
-  jest.fn(() => Promise.resolve())
+jest.mock(
+  "../../middlewares/controllerLogger",
+  () => (controller, action) => controller
 );
 jest.mock("../../middlewares/cache", () => ({
   cacheMiddleware: jest.fn(() => (req, res, next) => next()),
   invalidateCache: jest.fn(() => Promise.resolve(true)),
 }));
+jest.mock("../../utils/htmltemplates/sendPasswordResetEmail", () =>
+  jest.fn(() => Promise.resolve())
+);
 
 const request = require("supertest");
 const app = require("../../app");
