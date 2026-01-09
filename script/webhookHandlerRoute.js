@@ -12,9 +12,8 @@ const NotificationService = require("../utils/notificationService.js");
 // IMPORTANT: mount this route with express.raw in app.js:
 // app.post('/api/billing/webhook', express.raw({type: 'application/json'}), billingRouter);
 router.post("/webhook", async (req, res) => {
-  console.log(">>> webhook raw body length:", req.body?.length || "(no body)");
-  console.log(">>> headers stripe-signature:", req.headers["stripe-signature"]);
-
+  // console.log(">>> webhook raw body length:", req.body?.length || "(no body)");
+  // console.log(">>> headers stripe-signature:", req.headers["stripe-signature"]);
   const sig = req.headers["stripe-signature"];
   let event;
 
@@ -32,7 +31,7 @@ router.post("/webhook", async (req, res) => {
       .send(`Webhook Error: ${error.message || String(error)}`);
   }
 
-  console.log("Received Stripe webhook:", event.type);
+  // console.log("Received Stripe webhook:", event.type);
   const data = event.data.object;
 
   try {
@@ -40,7 +39,7 @@ router.post("/webhook", async (req, res) => {
       case "checkout.session.completed": {
         const session = event.data.object;
         if (session.mode === "setup") {
-          console.log("Setup session completed (card saved, no payment)");
+          // console.log("Setup session completed (card saved, no payment)");
           // can save paymentMethodId
           break;
         }
@@ -48,10 +47,10 @@ router.post("/webhook", async (req, res) => {
           const tenant = await Tenant.findOne({
             "subscription.stripeCustomerId": session.customer,
           });
-          console.log(tenant);
+          // console.log(tenant);
           // save subscription info now
           if (!tenant) {
-            console.log("tenant not found for the session:", session.id);
+            // console.log("tenant not found for the session:", session.id);
             break;
           }
           // Idempotency check
@@ -59,24 +58,24 @@ router.post("/webhook", async (req, res) => {
             tenant.subscription.lastPaymentIntentIdSent ===
             session.payment_intent
           ) {
-            console.log(
-              "Payment intent already processed:",
-              session.payment_intent
-            );
+            // console.log(
+            //   "Payment intent already processed:",
+            //   session.payment_intent
+            // );
             break;
           }
-          console.log(session.metadata?.plan);
+          // console.log(session.metadata?.plan);
           tenant.subscription = tenant.subscription || {};
           // Set plan dynamically based on session metadata (safer)
           tenant.subscription.checkoutSessionId = session.id;
           tenant.subscription.stripeCustomerId = session.customer || null;
           tenant.subscription.plan = session.metadata?.plan || "Enterprise";
           tenant.subscription.status = "active";
-          console.log(
-            tenant.subscription.checkoutSessionId,
-            session.id,
-            "this is the session id"
-          );
+          // console.log(
+          //   tenant.subscription.checkoutSessionId,
+          //   session.id,
+          //   "this is the session id"
+          // );
 
           // Get the payment amount
           let amount = 0;
@@ -102,14 +101,13 @@ router.post("/webhook", async (req, res) => {
               error
             );
           }
-          console.log(
-            `Checkout completed for ${tenant.email}, charged: $${(
-              amount / 100
-            ).toFixed(2)}`
-          );
-
-          activityLogger
-            .track({
+          // console.log(
+          //   `Checkout completed for ${tenant.email}, charged: $${(
+          //     amount / 100
+          //   ).toFixed(2)}`
+          // );
+          try {
+            activityLogger.track({
               req,
               res,
               user: { _id: null, role: "system" },
@@ -122,8 +120,10 @@ router.post("/webhook", async (req, res) => {
                 sessionId: session.id,
               },
               allowUserTenantFallback: true,
-            })
-            .catch((err) => console.error("Activity log failed:", err.message));
+            });
+          } catch (err) {
+            console.error("Activity log failed:", err.message);
+          }
         }
         break;
       }
@@ -152,12 +152,12 @@ router.post("/webhook", async (req, res) => {
           if (!tenant) {
             console.error("Tenant not found:", tenantId);
           } else {
-            console.log("Tenant found:", tenant.email);
+            // console.log("Tenant found:", tenant.email);
           }
 
           // --- FINAL STATE IDEMPOTENCY ---
           if (tenant.subscription.lastInvoiceIdSent === invoice.id) {
-            console.log("Invoice already processed, skipping:", invoice.id);
+            // console.log("Invoice already processed, skipping:", invoice.id);
             break;
           }
 
@@ -177,13 +177,13 @@ router.post("/webhook", async (req, res) => {
             amount: invoice.amount_paid,
           });
 
-          console.log(
-            "Saved PaymentIntent ID on invoice.payment_succeeded webhook",
-            invoice.payment_intent
-          );
+          // console.log(
+          //   "Saved PaymentIntent ID on invoice.payment_succeeded webhook",
+          //   invoice.payment_intent
+          // );
 
-          activityLogger
-            .track({
+          try {
+            activityLogger.track({
               req,
               res,
               user: { _id: null, role: "system" },
@@ -196,8 +196,10 @@ router.post("/webhook", async (req, res) => {
                 invoice,
               },
               allowUserTenantFallback: true,
-            })
-            .catch((err) => console.error("Activity log failed:", err.message));
+            });
+          } catch (err) {
+            console.error("Activity log failed:", err.message);
+          }
         }
         break;
 
@@ -217,8 +219,8 @@ router.post("/webhook", async (req, res) => {
           );
           req.tenant = tenant;
 
-          activityLogger
-            .track({
+          try {
+            activityLogger.track({
               req,
               res,
               user: { _id: null, role: "system" },
@@ -229,8 +231,10 @@ router.post("/webhook", async (req, res) => {
                 invoice,
               },
               allowUserTenantFallback: true,
-            })
-            .catch((err) => console.error("Activity log failed:", err.message));
+            });
+          } catch (err) {
+            console.error("Activity log failed:", err.message);
+          }
         }
         break;
       }
@@ -245,8 +249,8 @@ router.post("/webhook", async (req, res) => {
         if (!tenant) break;
 
         const planBeforeCancel = tenant.subscription.plan;
-        console.log(subscription.status);
-        console.log(tenant.subscription.status);
+        // console.log(subscription.status);
+        // console.log(tenant.subscription.status);
 
         // Only proceed if subscription status changed to canceled
         if (subscription.status !== "canceled") break;
@@ -277,8 +281,8 @@ router.post("/webhook", async (req, res) => {
           refundAmount,
           refundId,
         });
-        activityLogger
-          .track({
+        try {
+          activityLogger.track({
             req,
             res,
             user: { _id: null, role: "system" },
@@ -290,8 +294,10 @@ router.post("/webhook", async (req, res) => {
               amount: refundAmount,
             },
             allowUserTenantFallback: true,
-          })
-          .catch((err) => console.error("Activity log failed:", err.message));
+          });
+        } catch (err) {
+          console.error("Activity log failed:", err.message);
+        }
 
         break;
       }
@@ -322,8 +328,8 @@ router.post("/webhook", async (req, res) => {
         // DO NOT send email here
         // Email already sent in subscription.deleted
 
-        activityLogger
-          .track({
+        try {
+          activityLogger.track({
             req,
             res,
             user: { _id: null, role: "system" },
@@ -337,8 +343,10 @@ router.post("/webhook", async (req, res) => {
               chargeId: charge.id,
             },
             allowUserTenantFallback: true,
-          })
-          .catch((err) => console.error("Activity log failed:", err.message));
+          });
+        } catch (err) {
+          console.error("Activity log failed:", err.message);
+        }
 
         break;
       }
@@ -348,8 +356,8 @@ router.post("/webhook", async (req, res) => {
     }
   } catch (err) {
     console.error("Error handling webhook event:", err);
-    activityLogger
-      .track({
+    try {
+      activityLogger.track({
         req,
         res,
         user: { _id: null, role: "system" },
@@ -357,8 +365,10 @@ router.post("/webhook", async (req, res) => {
         resource: "BILLING",
         extra: { stripeEvent: event.type, error: err.message },
         allowUserTenantFallback: true,
-      })
-      .catch((err) => console.error("Activity log failed:", err.message));
+      });
+    } catch (err) {
+      console.error("Activity log failed:", err.message);
+    }
   }
 
   // return 200 to Stripe
