@@ -1,0 +1,1520 @@
+{
+	"info": {
+		"_postman_id": "543c9561-ffed-4c9b-a7dc-177ca6def4cd",
+		"name": "AccessPro_RBAC",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36813854"
+	},
+	"item": [
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZTZmZjU4ODcxYTJhNDFhYTVkNDU2NyIsImVtYWlsIjoiQmFzYW50YTJAZXhhbXBsZS5jb20iLCJuYW1lIjoiQmFzYW50YTIiLCJyb2xlIjoicmVjcnVpdGVyIiwiaWF0IjoxNzYwNDUwNTY2LCJleHAiOjE3NjA0NTQxNjZ9.rF1k05DNdVribTDMs3rHRxpClP2CoylsEscmWGpX8TE",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"BasantaOwner1\",\r\n    \"email\": \"basantaOwner1@gmail.com\",\r\n    \"password\":\"Mypassword#1234\",\r\n    \"companyName\":\"mistey Facilities1\",\r\n    \"domain\":\"misteyFacilities1.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGYwMmVkYTlmNmRhY2YzNGRmOWY3YTciLCJ0ZW5hbnRJZCI6IjY4ZjAyZWQ5OWY2ZGFjZjM0ZGY5ZjdhNSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc2MDU3MTA5OCwiZXhwIjoxNzYwNTc0Njk4fQ.45A0IS_Pk6q8HXJTsvB3mEv4e2xUYuE7w10VLUhtTpQ",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"basantaOwner1@gmail.com\",\r\n    \"password\":\"Mypassword#1234\",\r\n    \"companyName\":\"mistey Facilities1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/login",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTRmNmIxODBiOTVmZTg0ZTdlYzBjNGIiLCJ0ZW5hbnRJZCI6IjY5NGY2YjE3MGI5NWZlODRlN2VjMGM0MCIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJwZXJtaXNzaW9ucyI6WyJhdWRpdDp2aWV3IiwidXNlcjp2aWV3IiwidXNlcjp1cGRhdGUiLCJ1c2VyOmRlYWN0aXZhdGVkIiwidXNlcjpyZXN0b3JlZCIsInRlbmFudDp2aWV3IiwidGVuYW50OnVwZGF0ZSIsInRlbmFudDpkZWFjdGl2YXRlZCIsInRlbmFudDpyZXN0b3JlZCIsInVzZXI6Y3JlYXRlOmFkbWluIiwidXNlcjpkZWxldGU6YWRtaW4iLCJ1c2VyOmNyZWF0ZTplbXBsb3llZSIsInVzZXI6ZGVsZXRlOmVtcGxveWVlIiwicHJvamVjdDpjcmVhdGUiLCJwcm9qZWN0OnZpZXciLCJwcm9qZWN0OnVwZGF0ZSIsInByb2plY3Q6ZGVsZXRlIiwicHJvamVjdDpkZWFjdGl2YXRlZCIsInByb2plY3Q6cmVzdG9yZWQiXSwiaWF0IjoxNzY2ODEyNDY5LCJleHAiOjE3NjY4MTYwNjl9.p_7V37NLEDDxUFBXiRit09UmkHOEI9ieFrOviPYYt9",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"basanta@gmail.com\",\r\n    \"password\":\"mypassword123\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:5000/logout",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createAdminOwner",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTA5Nzg1MDQ2MzEyMTc0ZWIyMmQyZjIiLCJ0ZW5hbnRJZCI6IjY5MDk3ODUxNDYzMTIxNzRlYjIyZDJlNyIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJwZXJtaXNzaW9ucyI6WyJhdWRpdDp2aWV3IiwidXNlcjp2aWV3IiwidXNlcjp1cGRhdGUiLCJ1c2VyOmRlYWN0aXZhdGVkIiwidXNlcjpyZXN0b3JlZCIsInRlbmFudDp2aWV3IiwidGVuYW50OnVwZGF0ZSIsInRlbmFudDpkZWFjdGl2YXRlZCIsInRlbmFudDpyZXN0b3JlZCIsInVzZXI6Y3JlYXRlOmFkbWluIiwidXNlcjpkZWxldGU6YWRtaW4iLCJ1c2VyOmNyZWF0ZTplbXBsb3llZSIsInVzZXI6ZGVsZXRlOmVtcGxveWVlIiwicHJvamVjdDpjcmVhdGUiLCJwcm9qZWN0OnZpZXciLCJwcm9qZWN0OnVwZGF0ZSIsInByb2plY3Q6ZGVsZXRlIiwicHJvamVjdDpkZWFjdGl2YXRlZCIsInByb2plY3Q6cmVzdG9yZWQiXSwiaWF0IjoxNzY0MjM3NDkwLCJleHAiOjE3NjQyNDEwOTB9.fuumZUk3yJM98AQJbBUFESb-YtK6H-iHY9CpEccKl8w",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"basantaAdmin5\",\r\n    \"email\":\"basantaAdmin5@gmail.com\",\r\n    \"password\":\"mypassword123\",\r\n    \"role\":\"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/api/users/create",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"users",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createuserAdmin",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGYxMmZiMTcyN2IxNDNjNmY4ODcwYmYiLCJ0ZW5hbnRJZCI6IjY4ZjEyZmIwNzI3YjE0M2M2Zjg4NzBiNCIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJpYXQiOjE3NjE1ODAwMjYsImV4cCI6MTc2MTU4MzYyNn0.E_w-yG7zrTZiy5LTJpIYImYTN_7RrH8pE8ZDWavxz5Y",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"basantaEmployee\",\r\n    \"email\":\"basantaEmployee@gmail.com\",\r\n    \"password\":\"mypassword123\",\r\n    \"role\":\"employee\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/api/users/create",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"users",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createEmploweeOwner",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTU0Y2RiMmVkNzJiMzg1OGM0NzAwY2EiLCJ0ZW5hbnRJZCI6IjY5NTRjZGIxZWQ3MmIzODU4YzQ3MDBiZiIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMxIiwicGVybWlzc2lvbnMiOlsiYXVkaXQ6dmlldyIsInVzZXI6dmlldyIsInVzZXI6dXBkYXRlIiwidXNlcjpkZWFjdGl2YXRlZCIsInVzZXI6cmVzdG9yZWQiLCJ0ZW5hbnQ6dmlldyIsInRlbmFudDp1cGRhdGUiLCJ0ZW5hbnQ6ZGVhY3RpdmF0ZWQiLCJ0ZW5hbnQ6cmVzdG9yZWQiLCJ1c2VyOmNyZWF0ZTphZG1pbiIsInVzZXI6ZGVsZXRlOmFkbWluIiwidXNlcjpjcmVhdGU6ZW1wbG95ZWUiLCJ1c2VyOmRlbGV0ZTplbXBsb3llZSIsInByb2plY3Q6Y3JlYXRlIiwicHJvamVjdDp2aWV3IiwicHJvamVjdDp1cGRhdGUiLCJwcm9qZWN0OmRlbGV0ZSIsInByb2plY3Q6ZGVhY3RpdmF0ZWQiLCJwcm9qZWN0OnJlc3RvcmVkIl0sImlhdCI6MTc2NzY3NjcxMiwiZXhwIjoxNzY3NjgwMzEyfQ.5OF1Q37g_zLxOl0EfTYGG5e0ZdZlrXNHZaKaCqrL4Ew",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"basanta EmployeeByOwner\",\r\n    \"email\":\"basantaEmployeeByOwner@gmail.com\",\r\n    \"password\":\"mypassword123\",\r\n    \"role\":\"employee\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/api/users/create",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"users",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createEmployeeAdmin",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTA5NzhjYzQ2MzEyMTc0ZWIyMmQyZjYiLCJ0ZW5hbnRJZCI6IjY5MDk3ODUxNDYzMTIxNzRlYjIyZDJlNyIsInJvbGUiOiJhZG1pbiIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJpYXQiOjE3NjIzNTk3MTIsImV4cCI6MTc2MjM2MzMxMn0.7ZqtDYvtyxA_O4oTHn1kdQNHbRCZwtewRZiDxIQBkAA",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"basanta employeeAdmin\",\r\n    \"email\":\"basantaEmployeeByAdmin@gmail.com\",\r\n    \"password\":\"mypassword123\",\r\n    \"role\":\"employee\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/api/users/create",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"users",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createOwnerAdmin",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTAwNDkwNThmNWMwZWY4M2Y4MGIzMGYiLCJ0ZW5hbnRJZCI6IjY5MDA0NzVkOGY1YzBlZjgzZjgwYjJmYSIsInJvbGUiOiJlbXBsb3llZSIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJpYXQiOjE3NjE2MjY4MzYsImV4cCI6MTc2MTYzMDQzNn0.zzfG3SwquJ_g2D2ANF99_qlM-Vaw2ief6EBcOKOVwFE",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"basanta owner2\",\r\n    \"email\":\"basantaowner2@gmail.com\",\r\n    \"password\":\"mypassword123\",\r\n    \"role\":\"owner\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/api/users/create",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"users",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUsers",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTU0Y2RiMmVkNzJiMzg1OGM0NzAwY2EiLCJ0ZW5hbnRJZCI6IjY5NTRjZGIxZWQ3MmIzODU4YzQ3MDBiZiIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMxIiwicGVybWlzc2lvbnMiOlsiYXVkaXQ6dmlldyIsInVzZXI6dmlldyIsInVzZXI6dXBkYXRlIiwidXNlcjpkZWFjdGl2YXRlZCIsInVzZXI6cmVzdG9yZWQiLCJ0ZW5hbnQ6dmlldyIsInRlbmFudDp1cGRhdGUiLCJ0ZW5hbnQ6ZGVhY3RpdmF0ZWQiLCJ0ZW5hbnQ6cmVzdG9yZWQiLCJ1c2VyOmNyZWF0ZTphZG1pbiIsInVzZXI6ZGVsZXRlOmFkbWluIiwidXNlcjpjcmVhdGU6ZW1wbG95ZWUiLCJ1c2VyOmRlbGV0ZTplbXBsb3llZSIsInByb2plY3Q6Y3JlYXRlIiwicHJvamVjdDp2aWV3IiwicHJvamVjdDp1cGRhdGUiLCJwcm9qZWN0OmRlbGV0ZSIsInByb2plY3Q6ZGVhY3RpdmF0ZWQiLCJwcm9qZWN0OnJlc3RvcmVkIl0sImlhdCI6MTc2Nzc3OTY0MCwiZXhwIjoxNzY3NzgzMjQwfQ.zjC-vFDL4MJQj_sHEH23q7JnQCJSyT7YUVQaSNvGLW4",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:5000/api/users/getUsers",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"users",
+						"getUsers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteUserOwner",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTA5NzhjYzQ2MzEyMTc0ZWIyMmQyZjYiLCJ0ZW5hbnRJZCI6IjY5MDk3ODUxNDYzMTIxNzRlYjIyZDJlNyIsInJvbGUiOiJhZG1pbiIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJpYXQiOjE3NjIyMjg3NzAsImV4cCI6MTc2MjIzMjM3MH0.CnVY5mRC2XV980rw_QU7InKsf79pBEr0zMNleoeO04w",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/api/users/delete/690978cc46312174eb22d2f6",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"users",
+						"delete",
+						"690978cc46312174eb22d2f6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getProjects",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTU0Y2RiMmVkNzJiMzg1OGM0NzAwY2EiLCJ0ZW5hbnRJZCI6IjY5NTRjZGIxZWQ3MmIzODU4YzQ3MDBiZiIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMxIiwicGVybWlzc2lvbnMiOlsiYXVkaXQ6dmlldyIsInVzZXI6dmlldyIsInVzZXI6dXBkYXRlIiwidXNlcjpkZWFjdGl2YXRlZCIsInVzZXI6cmVzdG9yZWQiLCJ0ZW5hbnQ6dmlldyIsInRlbmFudDp1cGRhdGUiLCJ0ZW5hbnQ6ZGVhY3RpdmF0ZWQiLCJ0ZW5hbnQ6cmVzdG9yZWQiLCJ1c2VyOmNyZWF0ZTphZG1pbiIsInVzZXI6ZGVsZXRlOmFkbWluIiwidXNlcjpjcmVhdGU6ZW1wbG95ZWUiLCJ1c2VyOmRlbGV0ZTplbXBsb3llZSIsInByb2plY3Q6Y3JlYXRlIiwicHJvamVjdDp2aWV3IiwicHJvamVjdDp1cGRhdGUiLCJwcm9qZWN0OmRlbGV0ZSIsInByb2plY3Q6ZGVhY3RpdmF0ZWQiLCJwcm9qZWN0OnJlc3RvcmVkIl0sImlhdCI6MTc2Nzc3OTY0MCwiZXhwIjoxNzY3NzgzMjQwfQ.zjC-vFDL4MJQj_sHEH23q7JnQCJSyT7YUVQaSNvGLW4",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:5000/projects/getProjects",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"projects",
+						"getProjects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createProject",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTU0Y2RiMmVkNzJiMzg1OGM0NzAwY2EiLCJ0ZW5hbnRJZCI6IjY5NTRjZGIxZWQ3MmIzODU4YzQ3MDBiZiIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMxIiwicGVybWlzc2lvbnMiOlsiYXVkaXQ6dmlldyIsInVzZXI6dmlldyIsInVzZXI6dXBkYXRlIiwidXNlcjpkZWFjdGl2YXRlZCIsInVzZXI6cmVzdG9yZWQiLCJ0ZW5hbnQ6dmlldyIsInRlbmFudDp1cGRhdGUiLCJ0ZW5hbnQ6ZGVhY3RpdmF0ZWQiLCJ0ZW5hbnQ6cmVzdG9yZWQiLCJ1c2VyOmNyZWF0ZTphZG1pbiIsInVzZXI6ZGVsZXRlOmFkbWluIiwidXNlcjpjcmVhdGU6ZW1wbG95ZWUiLCJ1c2VyOmRlbGV0ZTplbXBsb3llZSIsInByb2plY3Q6Y3JlYXRlIiwicHJvamVjdDp2aWV3IiwicHJvamVjdDp1cGRhdGUiLCJwcm9qZWN0OmRlbGV0ZSIsInByb2plY3Q6ZGVhY3RpdmF0ZWQiLCJwcm9qZWN0OnJlc3RvcmVkIl0sImlhdCI6MTc2Nzc3OTY0MCwiZXhwIjoxNzY3NzgzMjQwfQ.zjC-vFDL4MJQj_sHEH23q7JnQCJSyT7YUVQaSNvGLW4",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"New Project\",\r\n  \"description\": \"This is a test project\",\r\n  \"assignedTo\": [\"695c9e768502f7c437bd60d6\"]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/projects/create",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"projects",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateProject",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTQ1MTA3YjE0MzQyODNiZjdkOGI2YTgiLCJ0ZW5hbnRJZCI6IjY5NDUxMDdhMTQzNDI4M2JmN2Q4YjY5ZCIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMxIiwicGVybWlzc2lvbnMiOlsiYXVkaXQ6dmlldyIsInVzZXI6dmlldyIsInVzZXI6dXBkYXRlIiwidXNlcjpkZWFjdGl2YXRlZCIsInVzZXI6cmVzdG9yZWQiLCJ0ZW5hbnQ6dmlldyIsInRlbmFudDp1cGRhdGUiLCJ0ZW5hbnQ6ZGVhY3RpdmF0ZWQiLCJ0ZW5hbnQ6cmVzdG9yZWQiLCJ1c2VyOmNyZWF0ZTphZG1pbiIsInVzZXI6ZGVsZXRlOmFkbWluIiwidXNlcjpjcmVhdGU6ZW1wbG95ZWUiLCJ1c2VyOmRlbGV0ZTplbXBsb3llZSIsInByb2plY3Q6Y3JlYXRlIiwicHJvamVjdDp2aWV3IiwicHJvamVjdDp1cGRhdGUiLCJwcm9qZWN0OmRlbGV0ZSIsInByb2plY3Q6ZGVhY3RpdmF0ZWQiLCJwcm9qZWN0OnJlc3RvcmVkIl0sImlhdCI6MTc2NjUyMzI4MywiZXhwIjoxNzY2NTI2ODgzfQ.OKPxkmruY5xi849Bcj6UQ2CSQY_zYZLrGY6om4wFyoY",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"updated by employee by owner\",\r\n    \"description\": \"This is a project updated by employee by owner\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/projects/update/694b02e18036940d3640a238",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"projects",
+						"update",
+						"694b02e18036940d3640a238"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getproject",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTA5NzljOTQ2MzEyMTc0ZWIyMmQzMDkiLCJ0ZW5hbnRJZCI6IjY5MDk3ODUxNDYzMTIxNzRlYjIyZDJlNyIsInJvbGUiOiJlbXBsb3llZSIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJwZXJtaXNzaW9ucyI6WyJwcm9qZWN0OnZpZXciLCJwcm9qZWN0OnVwZGF0ZSJdLCJpYXQiOjE3NjI2Mjg3MDMsImV4cCI6MTc2MjYzMjMwM30.VXywlbhvudVBjr3MgmgjIqM-mD2nVgIESls0v9YIj38",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:5000/projects/getProjects",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"projects",
+						"getProjects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "invite",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTQ1MTA3YjE0MzQyODNiZjdkOGI2YTgiLCJ0ZW5hbnRJZCI6IjY5NDUxMDdhMTQzNDI4M2JmN2Q4YjY5ZCIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMxIiwicGVybWlzc2lvbnMiOlsiYXVkaXQ6dmlldyIsInVzZXI6dmlldyIsInVzZXI6dXBkYXRlIiwidXNlcjpkZWFjdGl2YXRlZCIsInVzZXI6cmVzdG9yZWQiLCJ0ZW5hbnQ6dmlldyIsInRlbmFudDp1cGRhdGUiLCJ0ZW5hbnQ6ZGVhY3RpdmF0ZWQiLCJ0ZW5hbnQ6cmVzdG9yZWQiLCJ1c2VyOmNyZWF0ZTphZG1pbiIsInVzZXI6ZGVsZXRlOmFkbWluIiwidXNlcjpjcmVhdGU6ZW1wbG95ZWUiLCJ1c2VyOmRlbGV0ZTplbXBsb3llZSIsInByb2plY3Q6Y3JlYXRlIiwicHJvamVjdDp2aWV3IiwicHJvamVjdDp1cGRhdGUiLCJwcm9qZWN0OmRlbGV0ZSIsInByb2plY3Q6ZGVhY3RpdmF0ZWQiLCJwcm9qZWN0OnJlc3RvcmVkIl0sImlhdCI6MTc2NjY5MjcyOSwiZXhwIjoxNzY2Njk2MzI5fQ.P9rZiubSwMnYc0c0z_c56Fmj6Iumzcz1UJ56MqOkXcc",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"pokhrelb246@gmail.com\",\r\n    \"role\":\"employee\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/inviteRoute/invite",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"inviteRoute",
+						"invite"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete project",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTA5NzhjYzQ2MzEyMTc0ZWIyMmQyZjYiLCJ0ZW5hbnRJZCI6IjY5MDk3ODUxNDYzMTIxNzRlYjIyZDJlNyIsInJvbGUiOiJhZG1pbiIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJwZXJtaXNzaW9ucyI6WyJhdWRpdDp2aWV3IiwidXNlcjp2aWV3IiwidXNlcjp1cGRhdGUiLCJ1c2VyOmRlYWN0aXZhdGVkIiwidXNlcjpyZXN0b3JlZCIsInRlbmFudDp2aWV3IiwidGVuYW50OnVwZGF0ZSIsInRlbmFudDpkZWFjdGl2YXRlZCIsInRlbmFudDpyZXN0b3JlZCIsInVzZXI6Y3JlYXRlOmVtcGxveWVlIiwidXNlcjpkZWxldGU6ZW1wbG95ZWUiLCJwcm9qZWN0OmNyZWF0ZSIsInByb2plY3Q6dmlldyIsInByb2plY3Q6dXBkYXRlIiwicHJvamVjdDpkZWxldGUiLCJwcm9qZWN0OmRlYWN0aXZhdGVkIiwicHJvamVjdDpyZXN0b3JlZCJdLCJpYXQiOjE3NjI2Mjg5MTIsImV4cCI6MTc2MjYzMjUxMn0.auD2PPXhN7f6ekxz6Kq3QExFFi9bLpXzIH5I8o5f4UE",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:5000/projects/delete/690f9154f41ffbf19505c007",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"projects",
+						"delete",
+						"690f9154f41ffbf19505c007"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "acceptInvite",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBva2hyZWxiMjQ2QGdtYWlsLmNvbSIsInRlbmFudElkIjoiNjkwOTc4NTE0NjMxMjE3NGViMjJkMmU3Iiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNzYyNDA4NTIwLCJleHAiOjE3NjMwMTMzMjB9.Rn3UgAzGtOf5TQhhO4AvopfznpAp685lvCUCOu1V4kU\",\r\n  \"name\": \"Basanta from link\",\r\n  \"password\": \"mypassword123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/inviteRoute/accept-invite",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"inviteRoute",
+						"accept-invite"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "viewUsers",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTA5NzhjYzQ2MzEyMTc0ZWIyMmQyZjYiLCJ0ZW5hbnRJZCI6IjY5MDk3ODUxNDYzMTIxNzRlYjIyZDJlNyIsInJvbGUiOiJhZG1pbiIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJwZXJtaXNzaW9ucyI6WyJhdWRpdDp2aWV3IiwidXNlcjp2aWV3IiwidXNlcjp1cGRhdGUiLCJ1c2VyOmRlYWN0aXZhdGVkIiwidXNlcjpyZXN0b3JlZCIsInRlbmFudDp2aWV3IiwidGVuYW50OnVwZGF0ZSIsInRlbmFudDpkZWFjdGl2YXRlZCIsInRlbmFudDpyZXN0b3JlZCIsInVzZXI6Y3JlYXRlOmVtcGxveWVlIiwidXNlcjpkZWxldGU6ZW1wbG95ZWUiLCJwcm9qZWN0OmNyZWF0ZSIsInByb2plY3Q6dmlldyIsInByb2plY3Q6dXBkYXRlIiwicHJvamVjdDpkZWxldGUiLCJwcm9qZWN0OmRlYWN0aXZhdGVkIiwicHJvamVjdDpyZXN0b3JlZCJdLCJpYXQiOjE3NjI2NTA5MzIsImV4cCI6MTc2MjY1NDUzMn0.qju6pW19QjI0rZqvC1fzwunqKpbAzjm5Nf-hYdKV39M",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:5000/inviteRoute/getUsers",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"inviteRoute",
+						"getUsers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateInviteUsers",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTA5Nzg1MDQ2MzEyMTc0ZWIyMmQyZjIiLCJ0ZW5hbnRJZCI6IjY5MDk3ODUxNDYzMTIxNzRlYjIyZDJlNyIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJwZXJtaXNzaW9ucyI6WyJhdWRpdDp2aWV3IiwidXNlcjp2aWV3IiwidXNlcjp1cGRhdGUiLCJ1c2VyOmRlYWN0aXZhdGVkIiwidXNlcjpyZXN0b3JlZCIsInRlbmFudDp2aWV3IiwidGVuYW50OnVwZGF0ZSIsInRlbmFudDpkZWFjdGl2YXRlZCIsInRlbmFudDpyZXN0b3JlZCIsInVzZXI6Y3JlYXRlOmFkbWluIiwidXNlcjpkZWxldGU6YWRtaW4iLCJ1c2VyOmNyZWF0ZTplbXBsb3llZSIsInVzZXI6ZGVsZXRlOmVtcGxveWVlIiwicHJvamVjdDpjcmVhdGUiLCJwcm9qZWN0OnZpZXciLCJwcm9qZWN0OnVwZGF0ZSIsInByb2plY3Q6ZGVsZXRlIiwicHJvamVjdDpkZWFjdGl2YXRlZCIsInByb2plY3Q6cmVzdG9yZWQiXSwiaWF0IjoxNzYyNjI2NzE5LCJleHAiOjE3NjI2MzAzMTl9.4EL1yyiGfMFV_CN3bTwMc6JyHsCczcs4dTp8kS0Vlcs",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"role\": \"employee\",\r\n  \"isActive\": true\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/inviteRoute/690c38a17ffd5ef76641777e",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"inviteRoute",
+						"690c38a17ffd5ef76641777e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ADMINROUTES",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTA5Nzg1MDQ2MzEyMTc0ZWIyMmQyZjIiLCJ0ZW5hbnRJZCI6IjY5MDk3ODUxNDYzMTIxNzRlYjIyZDJlNyIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJwZXJtaXNzaW9ucyI6WyJhdWRpdDp2aWV3IiwidXNlcjp2aWV3IiwidXNlcjp1cGRhdGUiLCJ1c2VyOmRlYWN0aXZlIiwidGVuYW50OnZpZXciLCJ0ZW5hbnQ6dXBkYXRlIiwidGVuYW50OmRlYWN0aXZlIiwidXNlcjpjcmVhdGU6YWRtaW4iLCJ1c2VyOmRlbGV0ZTphZG1pbiIsInVzZXI6Y3JlYXRlOmVtcGxveWVlIiwidXNlcjpkZWxldGU6ZW1wbG95ZWUiLCJwcm9qZWN0OmNyZWF0ZSIsInByb2plY3Q6dmlldyIsInByb2plY3Q6dXBkYXRlIiwicHJvamVjdDpkZWxldGUiXSwiaWF0IjoxNzYyNjI2NTU5LCJleHAiOjE3NjI2MzAxNTl9.G9Gp2TFUZDVIsl7Xi1dFHmU-QCm0rE_oQoyhUEq74JA",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/api/admin/sync-roles",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"admin",
+						"sync-roles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllTenants",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTA5Nzg1MDQ2MzEyMTc0ZWIyMmQyZjIiLCJ0ZW5hbnRJZCI6IjY5MDk3ODUxNDYzMTIxNzRlYjIyZDJlNyIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJwZXJtaXNzaW9ucyI6WyJ1c2VyOnZpZXciLCJ1c2VyOnVwZGF0ZSIsInVzZXI6ZGVsZXRlIiwidXNlcjpjcmVhdGU6YWRtaW4iLCJ1c2VyOmRlbGV0ZTphZG1pbiIsInVzZXI6Y3JlYXRlOmVtcGxveWVlIiwidXNlcjpkZWxldGU6ZW1wbG95ZWUiLCJwcm9qZWN0OmNyZWF0ZSIsInByb2plY3Q6dmlldyIsInByb2plY3Q6dXBkYXRlIiwicHJvamVjdDpkZWxldGUiXSwiaWF0IjoxNzYyNDkzOTg5LCJleHAiOjE3NjI0OTc1ODl9.-BMBRuEITmyXWM9ETQbYdWStF62FV3lYIwPaHtPE4vM",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:5000/tenants",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"tenants"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deactiveInvitedUsers",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTA5NzhjYzQ2MzEyMTc0ZWIyMmQyZjYiLCJ0ZW5hbnRJZCI6IjY5MDk3ODUxNDYzMTIxNzRlYjIyZDJlNyIsInJvbGUiOiJhZG1pbiIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJwZXJtaXNzaW9ucyI6WyJhdWRpdDp2aWV3IiwidXNlcjp2aWV3IiwidXNlcjp1cGRhdGUiLCJ1c2VyOmRlYWN0aXZhdGVkIiwidXNlcjpyZXN0b3JlZCIsInRlbmFudDp2aWV3IiwidGVuYW50OnVwZGF0ZSIsInRlbmFudDpkZWFjdGl2YXRlZCIsInRlbmFudDpyZXN0b3JlZCIsInVzZXI6Y3JlYXRlOmVtcGxveWVlIiwidXNlcjpkZWxldGU6ZW1wbG95ZWUiLCJwcm9qZWN0OmNyZWF0ZSIsInByb2plY3Q6dmlldyIsInByb2plY3Q6dXBkYXRlIiwicHJvamVjdDpkZWxldGUiLCJwcm9qZWN0OmRlYWN0aXZhdGVkIiwicHJvamVjdDpyZXN0b3JlZCJdLCJpYXQiOjE3NjI2NTA5MzIsImV4cCI6MTc2MjY1NDUzMn0.qju6pW19QjI0rZqvC1fzwunqKpbAzjm5Nf-hYdKV39M",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/inviteRoute/690c38a17ffd5ef76641777e/deactive",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"inviteRoute",
+						"690c38a17ffd5ef76641777e",
+						"deactive"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getATenant",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTA5Nzg1MDQ2MzEyMTc0ZWIyMmQyZjIiLCJ0ZW5hbnRJZCI6IjY5MDk3ODUxNDYzMTIxNzRlYjIyZDJlNyIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJwZXJtaXNzaW9ucyI6WyJ1c2VyOnZpZXciLCJ1c2VyOnVwZGF0ZSIsInVzZXI6ZGVsZXRlIiwidXNlcjpjcmVhdGU6YWRtaW4iLCJ1c2VyOmRlbGV0ZTphZG1pbiIsInVzZXI6Y3JlYXRlOmVtcGxveWVlIiwidXNlcjpkZWxldGU6ZW1wbG95ZWUiLCJwcm9qZWN0OmNyZWF0ZSIsInByb2plY3Q6dmlldyIsInByb2plY3Q6dXBkYXRlIiwicHJvamVjdDpkZWxldGUiXSwiaWF0IjoxNzYyNDkzOTg5LCJleHAiOjE3NjI0OTc1ODl9.-BMBRuEITmyXWM9ETQbYdWStF62FV3lYIwPaHtPE4vM",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:5000/tenants/6909785146312174eb22d2e7",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"tenants",
+						"6909785146312174eb22d2e7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateATenant",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTA5Nzg1MDQ2MzEyMTc0ZWIyMmQyZjIiLCJ0ZW5hbnRJZCI6IjY5MDk3ODUxNDYzMTIxNzRlYjIyZDJlNyIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJwZXJtaXNzaW9ucyI6WyJ1c2VyOnZpZXciLCJ1c2VyOnVwZGF0ZSIsInVzZXI6ZGVhY3RpdmUiLCJ0ZW5hbnQ6dmlldyIsInRlbmFudDp1cGRhdGUiLCJ0ZW5hbnQ6ZGVhY3RpdmUiLCJ1c2VyOmNyZWF0ZTphZG1pbiIsInVzZXI6ZGVsZXRlOmFkbWluIiwidXNlcjpjcmVhdGU6ZW1wbG95ZWUiLCJ1c2VyOmRlbGV0ZTplbXBsb3llZSIsInByb2plY3Q6Y3JlYXRlIiwicHJvamVjdDp2aWV3IiwicHJvamVjdDp1cGRhdGUiLCJwcm9qZWN0OmRlbGV0ZSJdLCJpYXQiOjE3NjI1NTk0ODQsImV4cCI6MTc2MjU2MzA4NH0.hXGAPObK6srAjop_me3DBpB1VWZGix2_TOMMGPsM1Ds",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"Mistey Company\",\r\n     \"subscriptionPlan\": \"Pro\",\r\n     \"logo\": \"https://i.pinimg.com/736x/2c/99/f1/2c99f17b89bec0d5d752eb09cf10e165.jpg\",\r\n     \"domain\": \"mistey.com.np\",\r\n     \"status\":\"active\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/tenants/6909785146312174eb22d2e7/update",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"tenants",
+						"6909785146312174eb22d2e7",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deactive tenant",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTA5Nzg1MDQ2MzEyMTc0ZWIyMmQyZjIiLCJ0ZW5hbnRJZCI6IjY5MDk3ODUxNDYzMTIxNzRlYjIyZDJlNyIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJwZXJtaXNzaW9ucyI6WyJ1c2VyOnZpZXciLCJ1c2VyOnVwZGF0ZSIsInVzZXI6ZGVhY3RpdmUiLCJ0ZW5hbnQ6dmlldyIsInRlbmFudDp1cGRhdGUiLCJ0ZW5hbnQ6ZGVhY3RpdmUiLCJ1c2VyOmNyZWF0ZTphZG1pbiIsInVzZXI6ZGVsZXRlOmFkbWluIiwidXNlcjpjcmVhdGU6ZW1wbG95ZWUiLCJ1c2VyOmRlbGV0ZTplbXBsb3llZSIsInByb2plY3Q6Y3JlYXRlIiwicHJvamVjdDp2aWV3IiwicHJvamVjdDp1cGRhdGUiLCJwcm9qZWN0OmRlbGV0ZSJdLCJpYXQiOjE3NjI1NTk0ODQsImV4cCI6MTc2MjU2MzA4NH0.hXGAPObK6srAjop_me3DBpB1VWZGix2_TOMMGPsM1Ds",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"Mistey Company\",\r\n     \"subscriptionPlan\": \"Pro\",\r\n     \"logo\": \"https://i.pinimg.com/736x/2c/99/f1/2c99f17b89bec0d5d752eb09cf10e165.jpg\",\r\n     \"domain\": \"mistey.com.np\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/tenants/6909785146312174eb22d2e7/deactive",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"tenants",
+						"6909785146312174eb22d2e7",
+						"deactive"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getLoggedAudit",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTA5Nzg1MDQ2MzEyMTc0ZWIyMmQyZjIiLCJ0ZW5hbnRJZCI6IjY5MDk3ODUxNDYzMTIxNzRlYjIyZDJlNyIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJwZXJtaXNzaW9ucyI6WyJhdWRpdDp2aWV3IiwidXNlcjp2aWV3IiwidXNlcjp1cGRhdGUiLCJ1c2VyOmRlYWN0aXZlIiwidGVuYW50OnZpZXciLCJ0ZW5hbnQ6dXBkYXRlIiwidGVuYW50OmRlYWN0aXZlIiwidXNlcjpjcmVhdGU6YWRtaW4iLCJ1c2VyOmRlbGV0ZTphZG1pbiIsInVzZXI6Y3JlYXRlOmVtcGxveWVlIiwidXNlcjpkZWxldGU6ZW1wbG95ZWUiLCJwcm9qZWN0OmNyZWF0ZSIsInByb2plY3Q6dmlldyIsInByb2plY3Q6dXBkYXRlIiwicHJvamVjdDpkZWxldGUiXSwiaWF0IjoxNzYyNjIwMTAwLCJleHAiOjE3NjI2MjM3MDB9.Knyqtcwz2X-_Ep0RF3rVc1RAUuy4Tf3h84C5QRP1Vtg",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:5000/audit",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"audit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "softDeleteUsers",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTU0Y2RiMmVkNzJiMzg1OGM0NzAwY2EiLCJ0ZW5hbnRJZCI6IjY5NTRjZGIxZWQ3MmIzODU4YzQ3MDBiZiIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMxIiwicGVybWlzc2lvbnMiOlsiYXVkaXQ6dmlldyIsInVzZXI6dmlldyIsInVzZXI6dXBkYXRlIiwidXNlcjpkZWFjdGl2YXRlZCIsInVzZXI6cmVzdG9yZWQiLCJ0ZW5hbnQ6dmlldyIsInRlbmFudDp1cGRhdGUiLCJ0ZW5hbnQ6ZGVhY3RpdmF0ZWQiLCJ0ZW5hbnQ6cmVzdG9yZWQiLCJ1c2VyOmNyZWF0ZTphZG1pbiIsInVzZXI6ZGVsZXRlOmFkbWluIiwidXNlcjpjcmVhdGU6ZW1wbG95ZWUiLCJ1c2VyOmRlbGV0ZTplbXBsb3llZSIsInByb2plY3Q6Y3JlYXRlIiwicHJvamVjdDp2aWV3IiwicHJvamVjdDp1cGRhdGUiLCJwcm9qZWN0OmRlbGV0ZSIsInByb2plY3Q6ZGVhY3RpdmF0ZWQiLCJwcm9qZWN0OnJlc3RvcmVkIl0sImlhdCI6MTc2Nzc3OTY0MCwiZXhwIjoxNzY3NzgzMjQwfQ.zjC-vFDL4MJQj_sHEH23q7JnQCJSyT7YUVQaSNvGLW4",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:5000/api/users/soft-delete/695c9e768502f7c437bd60d6",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"users",
+						"soft-delete",
+						"695c9e768502f7c437bd60d6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "softDeleteProject",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTU0Y2RiMmVkNzJiMzg1OGM0NzAwY2EiLCJ0ZW5hbnRJZCI6IjY5NTRjZGIxZWQ3MmIzODU4YzQ3MDBiZiIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMxIiwicGVybWlzc2lvbnMiOlsiYXVkaXQ6dmlldyIsInVzZXI6dmlldyIsInVzZXI6dXBkYXRlIiwidXNlcjpkZWFjdGl2YXRlZCIsInVzZXI6cmVzdG9yZWQiLCJ0ZW5hbnQ6dmlldyIsInRlbmFudDp1cGRhdGUiLCJ0ZW5hbnQ6ZGVhY3RpdmF0ZWQiLCJ0ZW5hbnQ6cmVzdG9yZWQiLCJ1c2VyOmNyZWF0ZTphZG1pbiIsInVzZXI6ZGVsZXRlOmFkbWluIiwidXNlcjpjcmVhdGU6ZW1wbG95ZWUiLCJ1c2VyOmRlbGV0ZTplbXBsb3llZSIsInByb2plY3Q6Y3JlYXRlIiwicHJvamVjdDp2aWV3IiwicHJvamVjdDp1cGRhdGUiLCJwcm9qZWN0OmRlbGV0ZSIsInByb2plY3Q6ZGVhY3RpdmF0ZWQiLCJwcm9qZWN0OnJlc3RvcmVkIl0sImlhdCI6MTc2Nzc3OTY0MCwiZXhwIjoxNzY3NzgzMjQwfQ.zjC-vFDL4MJQj_sHEH23q7JnQCJSyT7YUVQaSNvGLW4",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:5000/projects/softDelete/695e2dc8d24d85e5675c5f8d",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"projects",
+						"softDelete",
+						"695e2dc8d24d85e5675c5f8d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "exportCsv",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTA5NzhjYzQ2MzEyMTc0ZWIyMmQyZjYiLCJ0ZW5hbnRJZCI6IjY5MDk3ODUxNDYzMTIxNzRlYjIyZDJlNyIsInJvbGUiOiJhZG1pbiIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJwZXJtaXNzaW9ucyI6WyJhdWRpdDp2aWV3IiwidXNlcjp2aWV3IiwidXNlcjp1cGRhdGUiLCJ1c2VyOmRlYWN0aXZhdGVkIiwidXNlcjpyZXN0b3JlZCIsInRlbmFudDp2aWV3IiwidGVuYW50OnVwZGF0ZSIsInRlbmFudDpkZWFjdGl2YXRlZCIsInRlbmFudDpyZXN0b3JlZCIsInVzZXI6Y3JlYXRlOmVtcGxveWVlIiwidXNlcjpkZWxldGU6ZW1wbG95ZWUiLCJwcm9qZWN0OmNyZWF0ZSIsInByb2plY3Q6dmlldyIsInByb2plY3Q6dXBkYXRlIiwicHJvamVjdDpkZWxldGUiLCJwcm9qZWN0OmRlYWN0aXZhdGVkIiwicHJvamVjdDpyZXN0b3JlZCJdLCJpYXQiOjE3NjMxMzU3ODUsImV4cCI6MTc2MzEzOTM4NX0.zgPibCdrKkXSJqxaHRrb6RIlfWDhB7M9AhSuUd6ZgG4",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:5000/audit/export",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"audit",
+						"export"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "restoreProject",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTU0Y2RiMmVkNzJiMzg1OGM0NzAwY2EiLCJ0ZW5hbnRJZCI6IjY5NTRjZGIxZWQ3MmIzODU4YzQ3MDBiZiIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMxIiwicGVybWlzc2lvbnMiOlsiYXVkaXQ6dmlldyIsInVzZXI6dmlldyIsInVzZXI6dXBkYXRlIiwidXNlcjpkZWFjdGl2YXRlZCIsInVzZXI6cmVzdG9yZWQiLCJ0ZW5hbnQ6dmlldyIsInRlbmFudDp1cGRhdGUiLCJ0ZW5hbnQ6ZGVhY3RpdmF0ZWQiLCJ0ZW5hbnQ6cmVzdG9yZWQiLCJ1c2VyOmNyZWF0ZTphZG1pbiIsInVzZXI6ZGVsZXRlOmFkbWluIiwidXNlcjpjcmVhdGU6ZW1wbG95ZWUiLCJ1c2VyOmRlbGV0ZTplbXBsb3llZSIsInByb2plY3Q6Y3JlYXRlIiwicHJvamVjdDp2aWV3IiwicHJvamVjdDp1cGRhdGUiLCJwcm9qZWN0OmRlbGV0ZSIsInByb2plY3Q6ZGVhY3RpdmF0ZWQiLCJwcm9qZWN0OnJlc3RvcmVkIl0sImlhdCI6MTc2Nzc3OTY0MCwiZXhwIjoxNzY3NzgzMjQwfQ.zjC-vFDL4MJQj_sHEH23q7JnQCJSyT7YUVQaSNvGLW4",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:5000/projects/restore/695e2dc8d24d85e5675c5f8d",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"projects",
+						"restore",
+						"695e2dc8d24d85e5675c5f8d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "restoreUsers",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTU0Y2RiMmVkNzJiMzg1OGM0NzAwY2EiLCJ0ZW5hbnRJZCI6IjY5NTRjZGIxZWQ3MmIzODU4YzQ3MDBiZiIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMxIiwicGVybWlzc2lvbnMiOlsiYXVkaXQ6dmlldyIsInVzZXI6dmlldyIsInVzZXI6dXBkYXRlIiwidXNlcjpkZWFjdGl2YXRlZCIsInVzZXI6cmVzdG9yZWQiLCJ0ZW5hbnQ6dmlldyIsInRlbmFudDp1cGRhdGUiLCJ0ZW5hbnQ6ZGVhY3RpdmF0ZWQiLCJ0ZW5hbnQ6cmVzdG9yZWQiLCJ1c2VyOmNyZWF0ZTphZG1pbiIsInVzZXI6ZGVsZXRlOmFkbWluIiwidXNlcjpjcmVhdGU6ZW1wbG95ZWUiLCJ1c2VyOmRlbGV0ZTplbXBsb3llZSIsInByb2plY3Q6Y3JlYXRlIiwicHJvamVjdDp2aWV3IiwicHJvamVjdDp1cGRhdGUiLCJwcm9qZWN0OmRlbGV0ZSIsInByb2plY3Q6ZGVhY3RpdmF0ZWQiLCJwcm9qZWN0OnJlc3RvcmVkIl0sImlhdCI6MTc2Nzc3OTY0MCwiZXhwIjoxNzY3NzgzMjQwfQ.zjC-vFDL4MJQj_sHEH23q7JnQCJSyT7YUVQaSNvGLW4",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:5000/api/users/restore/695c9e768502f7c437bd60d6",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"users",
+						"restore",
+						"695c9e768502f7c437bd60d6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check subscription",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTRmODZjZjhmZmYwYTBjODA3MTBkNTIiLCJ0ZW5hbnRJZCI6IjY5NGY4NmNmOGZmZjBhMGM4MDcxMGQ0NyIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJwZXJtaXNzaW9ucyI6WyJhdWRpdDp2aWV3IiwidXNlcjp2aWV3IiwidXNlcjp1cGRhdGUiLCJ1c2VyOmRlYWN0aXZhdGVkIiwidXNlcjpyZXN0b3JlZCIsInRlbmFudDp2aWV3IiwidGVuYW50OnVwZGF0ZSIsInRlbmFudDpkZWFjdGl2YXRlZCIsInRlbmFudDpyZXN0b3JlZCIsInVzZXI6Y3JlYXRlOmFkbWluIiwidXNlcjpkZWxldGU6YWRtaW4iLCJ1c2VyOmNyZWF0ZTplbXBsb3llZSIsInVzZXI6ZGVsZXRlOmVtcGxveWVlIiwicHJvamVjdDpjcmVhdGUiLCJwcm9qZWN0OnZpZXciLCJwcm9qZWN0OnVwZGF0ZSIsInByb2plY3Q6ZGVsZXRlIiwicHJvamVjdDpkZWFjdGl2YXRlZCIsInByb2plY3Q6cmVzdG9yZWQiXSwiaWF0IjoxNzY2ODI2MzE1LCJleHAiOjE3NjY4Mjk5MTV9.U7F_empR3-_yS_VsoEZ-juUIdRq1xZGN2QAUsTgl0Qk",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/api/billing/check-subscription",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"billing",
+						"check-subscription"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cancelSubscription",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTRmODZjZjhmZmYwYTBjODA3MTBkNTIiLCJ0ZW5hbnRJZCI6IjY5NGY4NmNmOGZmZjBhMGM4MDcxMGQ0NyIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJwZXJtaXNzaW9ucyI6WyJhdWRpdDp2aWV3IiwidXNlcjp2aWV3IiwidXNlcjp1cGRhdGUiLCJ1c2VyOmRlYWN0aXZhdGVkIiwidXNlcjpyZXN0b3JlZCIsInRlbmFudDp2aWV3IiwidGVuYW50OnVwZGF0ZSIsInRlbmFudDpkZWFjdGl2YXRlZCIsInRlbmFudDpyZXN0b3JlZCIsInVzZXI6Y3JlYXRlOmFkbWluIiwidXNlcjpkZWxldGU6YWRtaW4iLCJ1c2VyOmNyZWF0ZTplbXBsb3llZSIsInVzZXI6ZGVsZXRlOmVtcGxveWVlIiwicHJvamVjdDpjcmVhdGUiLCJwcm9qZWN0OnZpZXciLCJwcm9qZWN0OnVwZGF0ZSIsInByb2plY3Q6ZGVsZXRlIiwicHJvamVjdDpkZWFjdGl2YXRlZCIsInByb2plY3Q6cmVzdG9yZWQiXSwiaWF0IjoxNzY2ODI2MzE1LCJleHAiOjE3NjY4Mjk5MTV9.U7F_empR3-_yS_VsoEZ-juUIdRq1xZGN2QAUsTgl0Qk",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"pokhrelb246@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/api/billing/cancel-subscription",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"billing",
+						"cancel-subscription"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "subscribeRoute",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTU0Y2RiMmVkNzJiMzg1OGM0NzAwY2EiLCJ0ZW5hbnRJZCI6IjY5NTRjZGIxZWQ3MmIzODU4YzQ3MDBiZiIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMxIiwicGVybWlzc2lvbnMiOlsiYXVkaXQ6dmlldyIsInVzZXI6dmlldyIsInVzZXI6dXBkYXRlIiwidXNlcjpkZWFjdGl2YXRlZCIsInVzZXI6cmVzdG9yZWQiLCJ0ZW5hbnQ6dmlldyIsInRlbmFudDp1cGRhdGUiLCJ0ZW5hbnQ6ZGVhY3RpdmF0ZWQiLCJ0ZW5hbnQ6cmVzdG9yZWQiLCJ1c2VyOmNyZWF0ZTphZG1pbiIsInVzZXI6ZGVsZXRlOmFkbWluIiwidXNlcjpjcmVhdGU6ZW1wbG95ZWUiLCJ1c2VyOmRlbGV0ZTplbXBsb3llZSIsInByb2plY3Q6Y3JlYXRlIiwicHJvamVjdDp2aWV3IiwicHJvamVjdDp1cGRhdGUiLCJwcm9qZWN0OmRlbGV0ZSIsInByb2plY3Q6ZGVhY3RpdmF0ZWQiLCJwcm9qZWN0OnJlc3RvcmVkIl0sImlhdCI6MTc2NzU0OTgyNCwiZXhwIjoxNzY3NTUzNDI0fQ.Kqw2PMLQ7-hbcPqpMNqGKwvJxFOAYaIwmeQYTEv6mxY",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"pokhrelb135@gmail.com\",\r\n    \"plan\":\"Free\",\r\n    \"paymentMethodId\": \"pm_1SitSp4zNQZBZFHuYS44wIZT\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/api/billing/subscribe",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"billing",
+						"subscribe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reset password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"basantaOwner@gmail.com\",\r\n    \"companyName\": \"mistey Facilities\",\r\n    \"newPassword\": \"Mypassword#1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/password-reset",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"password-reset"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2FA -Setup",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTRmNmIxODBiOTVmZTg0ZTdlYzBjNGIiLCJ0ZW5hbnRJZCI6IjY5NGY2YjE3MGI5NWZlODRlN2VjMGM0MCIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJwZXJtaXNzaW9ucyI6WyJhdWRpdDp2aWV3IiwidXNlcjp2aWV3IiwidXNlcjp1cGRhdGUiLCJ1c2VyOmRlYWN0aXZhdGVkIiwidXNlcjpyZXN0b3JlZCIsInRlbmFudDp2aWV3IiwidGVuYW50OnVwZGF0ZSIsInRlbmFudDpkZWFjdGl2YXRlZCIsInRlbmFudDpyZXN0b3JlZCIsInVzZXI6Y3JlYXRlOmFkbWluIiwidXNlcjpkZWxldGU6YWRtaW4iLCJ1c2VyOmNyZWF0ZTplbXBsb3llZSIsInVzZXI6ZGVsZXRlOmVtcGxveWVlIiwicHJvamVjdDpjcmVhdGUiLCJwcm9qZWN0OnZpZXciLCJwcm9qZWN0OnVwZGF0ZSIsInByb2plY3Q6ZGVsZXRlIiwicHJvamVjdDpkZWFjdGl2YXRlZCIsInByb2plY3Q6cmVzdG9yZWQiXSwiaWF0IjoxNzY2ODEyNjU1LCJleHAiOjE3NjY4MTYyNTV9.l39ZDhxYksIOLecCq1e6cN7IPktPjOyOF9WiQKtq-bI",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"basantaOwner@gmail.com\",\r\n    \"password\":\"Mypassword#1234\",\r\n    \"companyName\":\"mistey Facilities\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/2fa/setup",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"2fa",
+						"setup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2FA-Setup-Verify",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTRmNmIxODBiOTVmZTg0ZTdlYzBjNGIiLCJ0ZW5hbnRJZCI6IjY5NGY2YjE3MGI5NWZlODRlN2VjMGM0MCIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJwZXJtaXNzaW9ucyI6WyJhdWRpdDp2aWV3IiwidXNlcjp2aWV3IiwidXNlcjp1cGRhdGUiLCJ1c2VyOmRlYWN0aXZhdGVkIiwidXNlcjpyZXN0b3JlZCIsInRlbmFudDp2aWV3IiwidGVuYW50OnVwZGF0ZSIsInRlbmFudDpkZWFjdGl2YXRlZCIsInRlbmFudDpyZXN0b3JlZCIsInVzZXI6Y3JlYXRlOmFkbWluIiwidXNlcjpkZWxldGU6YWRtaW4iLCJ1c2VyOmNyZWF0ZTplbXBsb3llZSIsInVzZXI6ZGVsZXRlOmVtcGxveWVlIiwicHJvamVjdDpjcmVhdGUiLCJwcm9qZWN0OnZpZXciLCJwcm9qZWN0OnVwZGF0ZSIsInByb2plY3Q6ZGVsZXRlIiwicHJvamVjdDpkZWFjdGl2YXRlZCIsInByb2plY3Q6cmVzdG9yZWQiXSwiaWF0IjoxNzY2ODEyNjU1LCJleHAiOjE3NjY4MTYyNTV9.l39ZDhxYksIOLecCq1e6cN7IPktPjOyOF9WiQKtq-bI",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\": 529351\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/2fa/verify-setup",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"2fa",
+						"verify-setup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2FA-Verify-login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTRmNmIxODBiOTVmZTg0ZTdlYzBjNGIiLCJ0ZW5hbnRJZCI6IjY5NGY2YjE3MGI5NWZlODRlN2VjMGM0MCIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMiLCJwZXJtaXNzaW9ucyI6WyJhdWRpdDp2aWV3IiwidXNlcjp2aWV3IiwidXNlcjp1cGRhdGUiLCJ1c2VyOmRlYWN0aXZhdGVkIiwidXNlcjpyZXN0b3JlZCIsInRlbmFudDp2aWV3IiwidGVuYW50OnVwZGF0ZSIsInRlbmFudDpkZWFjdGl2YXRlZCIsInRlbmFudDpyZXN0b3JlZCIsInVzZXI6Y3JlYXRlOmFkbWluIiwidXNlcjpkZWxldGU6YWRtaW4iLCJ1c2VyOmNyZWF0ZTplbXBsb3llZSIsInVzZXI6ZGVsZXRlOmVtcGxveWVlIiwicHJvamVjdDpjcmVhdGUiLCJwcm9qZWN0OnZpZXciLCJwcm9qZWN0OnVwZGF0ZSIsInByb2plY3Q6ZGVsZXRlIiwicHJvamVjdDpkZWFjdGl2YXRlZCIsInByb2plY3Q6cmVzdG9yZWQiXSwiaWF0IjoxNzY2ODEyNjU1LCJleHAiOjE3NjY4MTYyNTV9.l39ZDhxYksIOLecCq1e6cN7IPktPjOyOF9WiQKtq-bI",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\": 639970,\r\n    \"userId\": \"694f6b180b95fe84e7ec0c4b\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/2fa/verify-login",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"2fa",
+						"verify-login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "gettenantmetrics",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTU0Y2RiMmVkNzJiMzg1OGM0NzAwY2EiLCJ0ZW5hbnRJZCI6IjY5NTRjZGIxZWQ3MmIzODU4YzQ3MDBiZiIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMxIiwicGVybWlzc2lvbnMiOlsiYXVkaXQ6dmlldyIsInVzZXI6dmlldyIsInVzZXI6dXBkYXRlIiwidXNlcjpkZWFjdGl2YXRlZCIsInVzZXI6cmVzdG9yZWQiLCJ0ZW5hbnQ6dmlldyIsInRlbmFudDp1cGRhdGUiLCJ0ZW5hbnQ6ZGVhY3RpdmF0ZWQiLCJ0ZW5hbnQ6cmVzdG9yZWQiLCJ1c2VyOmNyZWF0ZTphZG1pbiIsInVzZXI6ZGVsZXRlOmFkbWluIiwidXNlcjpjcmVhdGU6ZW1wbG95ZWUiLCJ1c2VyOmRlbGV0ZTplbXBsb3llZSIsInByb2plY3Q6Y3JlYXRlIiwicHJvamVjdDp2aWV3IiwicHJvamVjdDp1cGRhdGUiLCJwcm9qZWN0OmRlbGV0ZSIsInByb2plY3Q6ZGVhY3RpdmF0ZWQiLCJwcm9qZWN0OnJlc3RvcmVkIl0sImlhdCI6MTc2NzE2NTM2OSwiZXhwIjoxNzY3MTY4OTY5fQ.DZzLQ-Sj-Lugd3on9iwU6jj-WHKYsg1vdVHekWTEriQ",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:5000/api/metrics/tenant",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"metrics",
+						"tenant"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAdminMetrics",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTU0Y2RiMmVkNzJiMzg1OGM0NzAwY2EiLCJ0ZW5hbnRJZCI6IjY5NTRjZGIxZWQ3MmIzODU4YzQ3MDBiZiIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMxIiwicGVybWlzc2lvbnMiOlsiYXVkaXQ6dmlldyIsInVzZXI6dmlldyIsInVzZXI6dXBkYXRlIiwidXNlcjpkZWFjdGl2YXRlZCIsInVzZXI6cmVzdG9yZWQiLCJ0ZW5hbnQ6dmlldyIsInRlbmFudDp1cGRhdGUiLCJ0ZW5hbnQ6ZGVhY3RpdmF0ZWQiLCJ0ZW5hbnQ6cmVzdG9yZWQiLCJ1c2VyOmNyZWF0ZTphZG1pbiIsInVzZXI6ZGVsZXRlOmFkbWluIiwidXNlcjpjcmVhdGU6ZW1wbG95ZWUiLCJ1c2VyOmRlbGV0ZTplbXBsb3llZSIsInByb2plY3Q6Y3JlYXRlIiwicHJvamVjdDp2aWV3IiwicHJvamVjdDp1cGRhdGUiLCJwcm9qZWN0OmRlbGV0ZSIsInByb2plY3Q6ZGVhY3RpdmF0ZWQiLCJwcm9qZWN0OnJlc3RvcmVkIl0sImlhdCI6MTc2NzE2NTM2OSwiZXhwIjoxNzY3MTY4OTY5fQ.DZzLQ-Sj-Lugd3on9iwU6jj-WHKYsg1vdVHekWTEriQ",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:5000/api/metrics/admin",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"metrics",
+						"admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "exportMetrics",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTU0Y2RiMmVkNzJiMzg1OGM0NzAwY2EiLCJ0ZW5hbnRJZCI6IjY5NTRjZGIxZWQ3MmIzODU4YzQ3MDBiZiIsInJvbGUiOiJvd25lciIsImNvbXBhbnlOYW1lIjoibWlzdGV5IEZhY2lsaXRpZXMxIiwicGVybWlzc2lvbnMiOlsiYXVkaXQ6dmlldyIsInVzZXI6dmlldyIsInVzZXI6dXBkYXRlIiwidXNlcjpkZWFjdGl2YXRlZCIsInVzZXI6cmVzdG9yZWQiLCJ0ZW5hbnQ6dmlldyIsInRlbmFudDp1cGRhdGUiLCJ0ZW5hbnQ6ZGVhY3RpdmF0ZWQiLCJ0ZW5hbnQ6cmVzdG9yZWQiLCJ1c2VyOmNyZWF0ZTphZG1pbiIsInVzZXI6ZGVsZXRlOmFkbWluIiwidXNlcjpjcmVhdGU6ZW1wbG95ZWUiLCJ1c2VyOmRlbGV0ZTplbXBsb3llZSIsInByb2plY3Q6Y3JlYXRlIiwicHJvamVjdDp2aWV3IiwicHJvamVjdDp1cGRhdGUiLCJwcm9qZWN0OmRlbGV0ZSIsInByb2plY3Q6ZGVhY3RpdmF0ZWQiLCJwcm9qZWN0OnJlc3RvcmVkIl0sImlhdCI6MTc2NzE2NTM2OSwiZXhwIjoxNzY3MTY4OTY5fQ.DZzLQ-Sj-Lugd3on9iwU6jj-WHKYsg1vdVHekWTEriQ",
+						"type": "text"
+					},
+					{
+						"key": "x-tenant",
+						"value": "misteyFacilities1.com",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:5000/api/metrics/export",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"metrics",
+						"export"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
