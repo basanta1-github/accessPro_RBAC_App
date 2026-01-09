@@ -77,66 +77,69 @@ AccessPro RBAC is a fully-featured enterprise SaaS backend enabling companies to
 
 Architecture Flow:
 Architecture Diagram (Placeholder):
+
+```
+Architecture Flow:
+Architecture Diagram (Placeholder):
 ┌──────────────────────┐
-│ Client = │
-│ Postman │
+│ Client =             │
+│ Postman              │
 └─────────┬────────────┘
-│
-▼
+          │
+          ▼
 ┌───────────────────────┐
-│ API Gateway / │
-│ |
-| Express.js Server │
-└─────────┬─────────────└
-│
+│ API Gateway /         │
+│ Express.js Server     │
+└─────────┬─────────────┘
+          │
 ┌─────────┴───────────────────┐
-│ Middleware Layer │
+│ Middleware Layer            │
 │ ┌─────────────────────────┐ │
-│ │ Auth (JWT)
-Authorization
-Caching│ │
-│ │ RBAC Enforcement │ │
-│ │ Tenant Isolation │ │
-│ │ Rate Limiting │ │
-│ │ Audit Logging │ │
-│ │ Metrics Collection
-Stripe Handelling
-Tenant Subdomain
-Plan Restriction│ │
+│ │ Auth (JWT)              │ │
+│ │ Authorization           │ │
+│ │ Caching                 │ │
+│ │ RBAC Enforcement        │ │
+│ │ Tenant Isolation        │ │
+│ │ Rate Limiting           │ │
+│ │ Audit Logging           │ │
+│ │ Metrics Collection      │ │
+│ │ Stripe Handling         │ │
+│ │ Tenant Subdomain        │ │
+│ │ Plan Restriction        │ │
 │ └─────────────────────────┘ │
 └───────────┬─────────────────┘
-│
+            │
 ┌───────────┴───────────┐
-│ Services Layer │
+│ Services Layer        │
 │ ┌───────────────────┐ │
-│ │ User Service │ │
-│ │ Tenant Service │ │
-│ │ Project Service │ │
-│ │ Billing Service │ │
-│ │ 2-FA │ │
-│ │ Analytics │ │
-│ │ Cache Service │ │
-Invites
-Soft-Delete/Deactive
-
+│ │ User Service      │ │
+│ │ Tenant Service    │ │
+│ │ Project Service   │ │
+│ │ Billing Service   │ │
+│ │ 2-FA              │ │
+│ │ Analytics         │ │
+│ │ Cache Service     │ │
+│ │ Invites           │ │
+│ │ Deactive          │ │
 │ └───────────────────┘ │
 └───────────┬───────────┘
-│
+            │
 ┌───────────┴───────────┐
-│ Databases & Cache │
-│ ┌─────────┐ ┌────────┐│
-│ │ MongoDB │ │ Redis ││
-│ └─────────┘ └────────┘│
+│ Databases & Cache     │
+│ ┌─────────┐┌────────┐ │
+│ │ MongoDB ││ Redis  │ │
+│ └─────────┘└────────┘ │
 └───────────┬───────────┘
-│
+            │
 ┌───────────┴───────┐
 │ External Services │
 │ ┌───────────────┐ │
-│ │ Stripe │ │
+│ │ Stripe        │ │
 │ │ Email Service │ │
-│ │ Webhooks │ │
+│ │ Webhooks      │ │
 │ └───────────────┘ │
 └───────────────────┘
+```
 
 # Setup & Installation
 
@@ -294,24 +297,21 @@ Endpoint Method Description
 
     - GET /audit
       Returns audit log entries for the tenant, including who did what and when.
-      ​# Get all logs (page 1, 25 items)
 
     - GET /audit/export
-      Exports audit logs as CSV for compliance, reporting, or offline analysis.
+      Exports audit logs as CSV for compliance, reporting, or offline analysis
 
-    GET /audit/?page=1&limit=25
+    - GET /audit/?page=1&limit=25
+      Get all logs (page 1, 25 items)
 
-# Last 30 days, page 2
+    - GET /audit/?from=2026-01-01T00:00:00Z&to=2026-01-09T23:59:59Z&page=2
+      Last 30 days, page 2
 
-GET /audit/?from=2026-01-01T00:00:00Z&to=2026-01-09T23:59:59Z&page=2
+    - GET /audit/?action=CREATE_PROJECT&action=UPDATE_PROJECT&resource=Project
+      Project actions only
 
-# Project actions only
-
-GET /audit/?action=CREATE_PROJECT&action=UPDATE_PROJECT&resource=Project
-
-# Specific user
-
-GET /audit/?userId=64f7b4567890abcdef123456
+    - GET /audit/?userId=64f7b4567890abcdef123456
+      Specific user
 
 7.  Metrics
 
