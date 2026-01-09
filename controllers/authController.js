@@ -112,12 +112,21 @@ const login = async (req, res) => {
     if (!tenant) {
       return res.status(400).json({ message: "Invalid company name" });
     }
-    const user = await User.findOne({ email, tenantId: tenant._id });
+    const user = await User.findOne({ email, tenantId: tenant._id }).setOptions(
+      {
+        _skipSoftDelete: ["User"],
+      }
+    );
     if (!user)
       return res
         .status(400)
         .json({ message: "Invalid Credentials or company name" });
 
+    if (user.isDeleted) {
+      return res
+        .status(403)
+        .json({ message: "User is deleted and cannot login" });
+    }
     // check if account is temporary locked due to multiple failed login attempts
     if (user.lockUntil && user.lockUntil > Date.now()) {
       const remaining = Math.ceil((user.lockUntil - Date.now()) / 1000 / 60);

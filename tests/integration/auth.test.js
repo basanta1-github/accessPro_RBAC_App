@@ -15,6 +15,7 @@ const app = require("../../app");
 const User = require("../../models/User");
 const passwordPolicy = require("../../utils/passwordPolicy");
 const Tenant = require("../../models/Tenant");
+const BlackListedTokens = require("../../models/blackListedToken");
 const getAuthTokens = require("../helpers/getAuthTokens");
 const generateOTP = require("../helpers/generateOTP");
 
@@ -379,6 +380,81 @@ describe("Auth - Integration tests Tests", () => {
         });
       expect(res.statusCode).toBe(200);
       expect(res.body.message).toMatch(/success/i);
+    });
+  });
+
+  describe("Blacklisted or deleted user access", () => {
+    let tokens;
+    let tenant;
+    let owner;
+    let admin;
+
+    beforeEach(async () => {
+      // Ensure clean state
+      await BlackListedTokens.deleteMany({});
+      await User.deleteMany({});
+
+      // Recreate tenant and user
+      tenant = await Tenant.create({
+        name: "TestCompany",
+        domain: "testDomain",
+        email: "owner@example.com",
+      });
+
+      admin = await User.create({
+        name: "admin User1",
+        email: "admin@example1.com",
+        password: "StrongPass1!",
+        role: "admin",
+        companyName: tenant.name,
+        tenantId: tenant._id,
+        isDeleted: true,
+      });
+
+      // await createDefaultRoles(tenant._id);
+
+      owner = await User.create({
+        name: "Owner User",
+        email: "owner@example.com",
+        password: "StrongPass1!",
+        role: "owner",
+        companyName: tenant.name,
+        tenantId: tenant._id,
+        isDeleted: false,
+      });
+
+      // Get auth tokens
+      tokens = await getAuthTokens({
+        email: owner.email,
+        password: "StrongPass1!",
+        companyName: owner.companyName,
+      });
+    });
+
+    it("should prevent requests with a blacklisted token", async () => {
+      // Add the token to blacklist
+      await BlackListedTokens.create({
+        token: tokens.accessToken,
+        expiresAt: new Date(Date.now() + 1000 * 60 * 60), // 1 hour from now
+      });
+
+      const res = await request(app)
+        .get("/api/users/getUsers")
+        .set("Authorization", `Bearer ${tokens.accessToken}`)
+        .set("x-tenant", "testDomain");
+
+      expect(res.statusCode).toBe(401);
+      expect(res.body.message).toMatch(/expired/i);
+    });
+    it("should prevent soft-deleted user from logging in", async () => {
+      const loginRes = await request(app).post("/login").send({
+        email: admin.email,
+        password: "StrongPass1!",
+        companyName: tenant.name,
+      });
+      console.log(loginRes.body);
+      expect(loginRes.statusCode).toBe(403);
+      expect(loginRes.body.message).toMatch(/user deleted|cannot login/i);
     });
   });
 });
