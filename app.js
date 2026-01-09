@@ -21,6 +21,10 @@ const errorHandler = require("./middlewares/errorHandler");
 // app rate limiter
 const appRateLimiter = require("./middlewares/rateLimiter/appRateLimit.js");
 
+//  Swagger setup (import + attach)
+const swaggerMain = require("./swagger/swaggerMain");
+swaggerMain(app);
+
 app.use(
   "/billing/webhook",
   express.raw({ type: "application/json" }),
