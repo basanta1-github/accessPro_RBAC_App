@@ -183,7 +183,7 @@ STRIPE_ENTERPRISE_PRICE_ID=<your-enterprise-price-id-obtained-from-stripe-produc
 REDIS_HOST=127.0.0.1
 REDIS_PORT=<>
 
-# REDIS_PASSWORD=your_redis_password # optional
+REDIS_PASSWORD=your_redis_password # optional
 
 # API Documentation
 
