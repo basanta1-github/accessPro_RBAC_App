@@ -71,27 +71,30 @@ jobs:
             set -e
 
             APP_DIR="${{ secrets.APP_DIR }}"
+            REPO="https://github.com/${{ github.repository }}.git"
 
             echo "Deploying AccessPro RBAC Backend..."
             echo "Target directory: $APP_DIR"
 
             if [ ! -d "$APP_DIR" ]; then
-              echo "ERROR: APP_DIR does not exist on the server."
-              echo "SSH in manually and run:"
-              echo "  mkdir -p $APP_DIR"
-              echo "  git clone https://github.com/${{ github.repository }}.git $APP_DIR"
-              exit 1
+              echo "APP_DIR not found — creating and cloning repo..."
+              mkdir -p "$APP_DIR"
+              git clone "$REPO" "$APP_DIR"
             fi
 
             cd "$APP_DIR"
 
             if [ ! -d ".git" ]; then
-              echo "ERROR: $APP_DIR is not a git repository."
+              echo "ERROR: $APP_DIR exists but is not a git repository."
+              echo "Remove it and re-run deploy, or fix APP_DIR."
               exit 1
             fi
 
             git fetch origin main
             git reset --hard origin/main
+
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
             npm ci --production
 
