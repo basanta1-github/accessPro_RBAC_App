@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const Tenant = require("../models/Tenant");
-const Invite = `../models/Invite`;
+const Invite = require("../models/Invite");
 
 const generateInviteToken = require("../utils/generateInviteToken");
 const checkEmailExists = require("../utils/checkEmailExists");

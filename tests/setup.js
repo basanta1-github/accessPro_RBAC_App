@@ -8,8 +8,13 @@ beforeAll(async () => {
   process.env.MONGO_URI = uri;
   process.env.JWT_ACCESS_SECRET = "test_access_secret";
   process.env.REFRESH_TOKEN_SECRET = "test_refresh_secret";
+  process.env.INVITE_TOKEN_SECRET = "test_invite_secret";
   process.env.JWT_ACCESS_EXPIRES = "15m";
   process.env.REFRESH_EXPIRES = "7d";
+  process.env.STRIPE_SECRET_KEY =
+    process.env.STRIPE_SECRET_KEY || "sk_test_ci_placeholder";
+  process.env.WEBHOOK_SIGNING_SECRET =
+    process.env.WEBHOOK_SIGNING_SECRET || "whsec_ci_placeholder";
 
   await mongoose.connect(uri);
 });
