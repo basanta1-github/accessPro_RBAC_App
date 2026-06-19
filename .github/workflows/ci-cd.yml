@@ -53,7 +53,8 @@ jobs:
     name: Deploy to Production
     needs: test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    # Set repository variable ENABLE_SSH_DEPLOY=true after SSH secrets are configured
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && vars.ENABLE_SSH_DEPLOY == 'true'
 
     steps:
       - name: Checkout Code
